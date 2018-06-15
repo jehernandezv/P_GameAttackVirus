@@ -1,16 +1,19 @@
 package model;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 
-public class Hero extends Rectangle{
-	private static final long serialVersionUID = 1L;
+public class Hero{
 	private GroupBullet groupBullet;
 	private short health = 100;
+	private int xHero;
+	private int yHero;
+	private int size;
 
 	public Hero(int x, int y ,int size) {
-		super(x,y,size,size);
+		this.xHero = x;
+		this.yHero = x;
+		this.size = size;
 		groupBullet = new GroupBullet();
 	}
 	
@@ -41,5 +44,31 @@ public class Hero extends Rectangle{
 	public void addBullet(Bullet bullet){
 		this.groupBullet.getListBullets().add(bullet);
 	}
+
+	public int getxHero() {
+		return xHero;
+	}
+
+	public void setxHero(int xHero) {
+		this.xHero = xHero;
+	}
+
+	public int getyHero() {
+		return yHero;
+	}
+
+	public void setyHero(int yHero) {
+		this.yHero = yHero;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+	
+	
 
 }

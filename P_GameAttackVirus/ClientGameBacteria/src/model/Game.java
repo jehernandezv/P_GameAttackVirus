@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.Timer;
 
@@ -17,10 +18,12 @@ public class Game{
 	private Rectangle areaGame;
 	private Boss boss;
 	private short timeSave;
+	private GroupFriends groupFriends;
 	
 	public Game(Hero hero,Rectangle areaGame) {
 		this.hero = hero;
 		this.areaGame = areaGame;
+		this.groupFriends = new GroupFriends();
 	}
 	
 	public void stop(){
@@ -57,11 +60,16 @@ public class Game{
 	public void bulletUpdate(){
 		this.timerBullet = new Timer(10, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-								//Mover disparos
+							//Mover disparos
 							try {
-								for (int i = 0; i < hero.getGroupBullet().getListBullets().size(); i++) {
-									hero.getGroupBullet().getListBullets().get(i).move(5);
-								    }
+								for (Iterator<?> it = getListBullet().iterator(); it.hasNext();) {
+									Bullet bullet = (Bullet) it.next();
+									if(bullet.x > areaGame.getWidth() || bullet.y > areaGame.getHeight()){
+										it.remove();
+									}else{
+										bullet.move(5);
+									}
+								  }
 								} catch (InterruptedException e1) {
 									e1.printStackTrace();
 								}
@@ -70,6 +78,10 @@ public class Game{
 				timerBullet.start();
 		}
 	
+	public ArrayList<InfoFigures> getListFriends(){
+		return groupFriends.getListFriends();
+	}
+
 	public void addBullet(Bullet bullet){
 		this.hero.addBullet(bullet);
 	}

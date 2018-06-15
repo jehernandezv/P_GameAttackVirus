@@ -1,47 +1,47 @@
 package model;
 
-import java.awt.Rectangle;
-public class Enemy extends Rectangle{
-	private static final long serialVersionUID = 1L;
+public class Enemy {
 	private int step = 2;
 	private short health = 40;
+	private int posX;
+	private int posY;
+	private int size;
+	
 	public Enemy(int x,int y,int size) {
-		super(x,y,size,size);
+		this.posX = x;
+		this.posY = y;
+		this.size = size;
 	}
 
 	public void chase(int xHero, int yHero){
-		if(x >= xHero){
+		if(this.posX >= xHero){
 			this.moveLeft();
 		}
-		if(x <= xHero){
+		if(this.posX <= xHero){
 			this.moveRigth();
 		}
-		if(y > yHero){
+		if(this.posY > yHero){
 			this.moveUP();
 		}
-		if(y < yHero){
+		if(this.posY < yHero){
 			this.moveDown();
 		}
 	}
 	
-	public boolean isColision(int x,int y){
-		return this.contains(x, y);
-	}
-	
 	public void moveLeft(){
-		x -=step ;
+		this.posX -=step ;
 	}
 	
 	public void moveRigth(){
-		x += step ;
+		this.posX += step ;
 	}
 	
 	public void moveUP(){
-		y -= step;
+		this.posY -= step;
 	}
 	
 	public void moveDown(){
-		y += step ;
+		this.posY += step ;
 	}
 	public void decreaseHealth(short value){
 		this.health -= value; 
@@ -62,7 +62,12 @@ public class Enemy extends Rectangle{
 	public void setStep(int step) {
 		this.step = step;
 	}
-	
-	
 
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
 }

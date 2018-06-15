@@ -18,11 +18,21 @@ public class JPGameZone extends JPanel{
 	public void paint(Graphics g) {
 		super.paint(g);
 		this.setBackground(Color.decode("#5D92FF"));
+		//Disparos de mi jugador
 		g.setColor(Color.RED);
 		for (int i = 0; i < game.getListBullet().size(); i++) {
 			g.fillRect(game.getListBullet().get(i).x , game.getListBullet().get(i).y , game.getListBullet().get(i).width, game.getListBullet().get(i).height);
 		}
+		//Mi figura
 		g.setColor(Color.GREEN);
-		g.fillRect(game.getHero().x, game.getHero().y, game.getHero().width, game.getHero().height);
+		g.fillRect(game.getHero().getxHero(), game.getHero().getyHero(), game.getHero().getSize(), game.getHero().getSize());
+		
+		//Amigos
+		g.setColor(Color.BLACK);
+		for (int i = 0; i < game.getListFriends().size(); i++) {
+			g.fillRect(game.getListFriends().get(i).getX(), game.getListFriends().get(i).getY(),
+					game.getListFriends().get(i).getSize(),game.getListFriends().get(i).getSize());
 		}
+	}
+		
 }

@@ -26,6 +26,7 @@ public class Server extends Thread {
 	public void run() {
 		while (!stop) {
 			Socket connection;
+			System.out.println("Cant Clientes: " + this.connections.size());
 			try {
 				connection = server.accept();
 				connections.add(new ThreadSocket(connection));

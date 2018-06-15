@@ -6,7 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+
 import javax.swing.Timer;
+
+import comunications.Defender;
+
 import model.Bullet;
 import model.Game;
 import model.Hero;
@@ -15,6 +19,7 @@ import view.JFrameMainWindow;
 
 public class Controller implements MouseListener,ActionListener{
 	private JFrameMainWindow jFrameMainWindow;
+	private Defender defender;
 	private JDInitGame jdInitGame;
 	private Game game;
 	private Timer timerRefresh;
@@ -30,16 +35,16 @@ public class Controller implements MouseListener,ActionListener{
 		switch (EAction.valueOf(e.getActionCommand())) {
 		case INIIGAME:
 			jdInitGame.disableJDInit();
-			//try {
-				//this.defender = new Defender("localhost", 9000);
-				//this.defender.requestInitGame();
+			try {
+				this.defender = new Defender("localhost", 9000);
+				this.defender.requestInitGame();
 				this.jFrameMainWindow = new JFrameMainWindow(this,game);
 				this.jFrameMainWindow.initGame(this);
 				this.game.initGame();
 				this.refresh();
-//			} catch (IOException e1) {
-//				e1.printStackTrace();
-//			}
+			} catch (IOException e1) {
+				e1.printStackTrace();
+		}
 			break;
 			
 		default:
@@ -48,7 +53,7 @@ public class Controller implements MouseListener,ActionListener{
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		this.game.addBullet(new Bullet(0, (short) 50, game.getHero().x, game.getHero().y));
+		this.game.addBullet(new Bullet(0, (short) 50, game.getHero().getxHero(), game.getHero().getyHero()));
 		if(game.getListBullet().size() > 0){
 		System.out.println("Pos: " + this.game.getListBullet().get(0).x);
 		}
