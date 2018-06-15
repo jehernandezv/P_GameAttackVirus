@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 
-public class ThreadSocket extends Thread {
-
+public class ThreadSocket extends Thread implements IObservable{
+	private IObserver iObserver;
+	public int idObservable;
+	private static int cont;
 	private Socket connection;
 	private DataInputStream input;
 	private DataOutputStream output;
@@ -17,6 +19,7 @@ public class ThreadSocket extends Thread {
 		this.connection = socket;
 		input = new DataInputStream(socket.getInputStream());
 		output = new DataOutputStream(socket.getOutputStream());
+		idObservable = ++cont;
 		start();
 	}
 
@@ -29,7 +32,8 @@ public class ThreadSocket extends Thread {
 					manageRequest(request);
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.err.println(e.getMessage());
+				this.stop = true;
 			}
 		}
 	}
@@ -38,7 +42,7 @@ public class ThreadSocket extends Thread {
 		Server.LOGGER.log(Level.INFO, "Request: " + connection.getInetAddress().getHostAddress() + " - " + request);
 		switch (ERequest.valueOf(request)) {
 		case INITGAME:
-			sentAreaGame();
+			this.iObserver.sentAreaGamePlayers(idObservable);
 			break;
 		default:
 			break;
@@ -46,12 +50,40 @@ public class ThreadSocket extends Thread {
 		Server.LOGGER.log(Level.INFO, "Conexion con: " + connection.getInetAddress().getHostAddress() + " cerrada.");
 	}
 	
-	private void sentAreaGame() throws IOException{
+	public void sentAreaGame(int [] areaGame) throws IOException{
 		output.writeUTF(EResponse.INITGAME.name());
-		output.writeInt(800);
-		output.writeInt(600);
+		output.writeInt(areaGame[0]);
+		output.writeInt(areaGame[1]);
 	}
 
+	public IObserver getiObserver() {
+		return iObserver;
+	}
+
+	public void setiObserver(IObserver iObserver) {
+		this.iObserver = iObserver;
+	}
+
+	@Override
+	public void addObserver(IObserver observer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeObserver() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public int getIdObservable() {
+		return idObservable;
+	}
+
+	public void setIdObservable(int idObservable) {
+		this.idObservable = idObservable;
+	}
+	
 //	private void responseTimeService() throws IOException {
 //		output.writeUTF(EResponse.TIME.toString());
 //		output.writeUTF(LocalTime.now().format(DateTimeFormatter.ISO_TIME));

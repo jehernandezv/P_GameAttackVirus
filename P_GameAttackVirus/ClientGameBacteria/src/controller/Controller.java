@@ -5,7 +5,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+
 import javax.swing.Timer;
+
 import comunications.Defender;
 import model.Bullet;
 import model.Game;
@@ -23,8 +25,6 @@ public class Controller implements MouseListener,ActionListener{
 	
 	public Controller() throws IOException {
 		jdInitGame = new JDInitGame(this);
-		int [] areaGame = {800,600};
-		game = new Game(new Hero(100, 100, 50), areaGame);
 		jdInitGame.showJDInit();
 	}
 
@@ -34,7 +34,9 @@ public class Controller implements MouseListener,ActionListener{
 			jdInitGame.disableJDInit();
 			try {
 				this.defender = new Defender("localhost", 9000);
-				this.defender.requestInitGame();
+				defender.requestInitGame();
+				System.out.println("witrh: " +defender.getAreaGame()[0]+ " heith: " + defender.getAreaGame()[1]);
+				game = new Game(new Hero(100, 100, 50), defender.getAreaGame());
 				this.jFrameMainWindow = new JFrameMainWindow(this,game);
 				this.jFrameMainWindow.initGame(this);
 				this.game.start();

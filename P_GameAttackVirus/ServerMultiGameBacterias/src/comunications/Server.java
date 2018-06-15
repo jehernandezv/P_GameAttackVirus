@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Server extends Thread {
+public class Server extends Thread implements IObserver {
 
 	private ServerSocket server;
 	private int port;
 	private boolean stop;
 	public final static Logger LOGGER = Logger.getGlobal();
 	private ArrayList<ThreadSocket> connections;
-
+	private int [] areaGame = {800,600};
 	public Server(int port) throws IOException {
 		connections = new ArrayList<>();
 		this.port = port;
@@ -29,10 +29,13 @@ public class Server extends Thread {
 			System.out.println("Cant Clientes: " + this.connections.size());
 			try {
 				connection = server.accept();
-				connections.add(new ThreadSocket(connection));
+				ThreadSocket socket = new ThreadSocket(connection);
+				socket.setiObserver(this);
+				connections.add(socket);
 				LOGGER.log(Level.INFO, "Conexion aceptada: " + connection.getInetAddress().getHostAddress());
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.err.println(e.getMessage());
+				this.stop = true;
 			}
 		}
 	}
@@ -42,6 +45,19 @@ public class Server extends Thread {
 			new Server(9000);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void sentAreaGamePlayers(int idClientRequestArea) {
+		for (int i = 0; i < this.connections.size(); i++) {
+			if(connections.get(i).getIdObservable() == idClientRequestArea){
+				try {
+					connections.get(i).sentAreaGame(areaGame);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
 		}
 	}
 }
