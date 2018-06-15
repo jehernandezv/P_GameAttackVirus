@@ -1,16 +1,12 @@
 package controller;
 
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-
 import javax.swing.Timer;
-
 import comunications.Defender;
-
 import model.Bullet;
 import model.Game;
 import model.Hero;
@@ -27,7 +23,8 @@ public class Controller implements MouseListener,ActionListener{
 	
 	public Controller() throws IOException {
 		jdInitGame = new JDInitGame(this);
-		game = new Game(new Hero(100, 100, 50), new Rectangle(800,600));
+		int [] areaGame = {800,600};
+		game = new Game(new Hero(100, 100, 50), areaGame);
 		jdInitGame.showJDInit();
 	}
 
@@ -40,7 +37,7 @@ public class Controller implements MouseListener,ActionListener{
 				this.defender.requestInitGame();
 				this.jFrameMainWindow = new JFrameMainWindow(this,game);
 				this.jFrameMainWindow.initGame(this);
-				this.game.initGame();
+				this.game.start();
 				this.refresh();
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -54,9 +51,6 @@ public class Controller implements MouseListener,ActionListener{
 	
 	public void mouseClicked(MouseEvent e) {
 		this.game.addBullet(new Bullet(0, (short) 50, game.getHero().getxHero(), game.getHero().getyHero()));
-		if(game.getListBullet().size() > 0){
-		System.out.println("Pos: " + this.game.getListBullet().get(0).x);
-		}
 	}
 
 	@Override

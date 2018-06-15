@@ -30,7 +30,8 @@ public class Defender extends Thread {
 					manageResponse(response);
 				}
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
+				this.stop = true;
 			}
 		}
 	}

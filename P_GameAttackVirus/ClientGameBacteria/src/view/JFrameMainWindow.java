@@ -12,7 +12,7 @@ public class JFrameMainWindow extends JFrame{
 		
 	public JFrameMainWindow(Controller controller,Game game) {
 		this.game = game;
-		this.setSize(game.getAreaGame().width, game.getAreaGame().height);
+		this.setSize(game.getAreaGame()[0], game.getAreaGame()[1]);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);

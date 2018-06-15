@@ -1,82 +1,45 @@
 package model;
 
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.swing.Timer;
-
-public class Game{
+public class Game extends Thread{
 	private Hero hero;
-	private Timer timerCronometer;
-	private Timer timerBullet;
 	private String cronometer;
 	private LocalDateTime cronometerGame;
-	private Rectangle areaGame;
+	private int [] areaGame;
 	private Boss boss;
 	private short timeSave;
 	private GroupFriends groupFriends;
 	
-	public Game(Hero hero,Rectangle areaGame) {
+	public Game(Hero hero,int [] areaGame) {
 		this.hero = hero;
 		this.areaGame = areaGame;
 		this.groupFriends = new GroupFriends();
 	}
 	
-	public void stop(){
-		timerCronometer.stop();
-	}
-	
-	public void initGame(){
-		cromometer();
-		bulletUpdate();
-	}
-	
-	public void cromometer(){
-		timerCronometer = new Timer(1000, new ActionListener() {
-			byte second = (byte) ((cronometerGame != null)? cronometerGame.getSecond():0);
-			byte minute = (byte) ((cronometerGame != null)? cronometerGame.getMinute():0);
-			byte hour = (byte) ((cronometerGame != null)? cronometerGame.getHour():0);
-			public void actionPerformed(ActionEvent e) {
-				second ++;
-				if(second == 60){
-					minute ++;
-					second = 0;
+
+	@Override
+	public void run() {
+		//Mover disparos
+		while(true){
+		try {
+			Thread.sleep(10);
+			for (Iterator<?> it = getListBullet().iterator(); it.hasNext();) {
+				Bullet bullet = (Bullet) it.next();
+				if(bullet.getX() > areaGame[0] || bullet.getY() > areaGame[1]){
+					it.remove();
+				}else{
+					bullet.move(5);
 				}
-				if(minute == 60){
-					hour++;
-					minute = 0;
-				}
-				cronometer = "Hour : " + hour + " Minutes : " + minute + " Second : " + second;
+			  }
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
 			}
-		
-		});
-		timerCronometer.start();
-	}
-	
-	public void bulletUpdate(){
-		this.timerBullet = new Timer(10, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-							//Mover disparos
-							try {
-								for (Iterator<?> it = getListBullet().iterator(); it.hasNext();) {
-									Bullet bullet = (Bullet) it.next();
-									if(bullet.x > areaGame.getWidth() || bullet.y > areaGame.getHeight()){
-										it.remove();
-									}else{
-										bullet.move(5);
-									}
-								  }
-								} catch (InterruptedException e1) {
-									e1.printStackTrace();
-								}
-							}
-				});
-				timerBullet.start();
 		}
+		
+	}
 	
 	public ArrayList<InfoFigures> getListFriends(){
 		return groupFriends.getListFriends();
@@ -100,11 +63,7 @@ public class Game{
 
 	public String getCronometer() {
 		return cronometer;
-	}
-
-
-	public Timer getTimerCronometer() {
-		return timerCronometer;
+	
 	}
 
 	public LocalDateTime getCronometerGame() {
@@ -115,11 +74,11 @@ public class Game{
 		this.cronometerGame = cronometerGame;
 	}
 
-	public Rectangle getAreaGame() {
+	public int[] getAreaGame() {
 		return areaGame;
 	}
 
-	public void setAreaGame(Rectangle areaGame) {
+	public void setAreaGame(int[] areaGame) {
 		this.areaGame = areaGame;
 	}
 
@@ -138,5 +97,5 @@ public class Game{
 	public void setTimeSave(short timeSave) {
 		this.timeSave = timeSave;
 	}
-	
+
 }

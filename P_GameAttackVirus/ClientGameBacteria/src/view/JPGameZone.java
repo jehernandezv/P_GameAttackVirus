@@ -21,7 +21,7 @@ public class JPGameZone extends JPanel{
 		//Disparos de mi jugador
 		g.setColor(Color.RED);
 		for (int i = 0; i < game.getListBullet().size(); i++) {
-			g.fillRect(game.getListBullet().get(i).x , game.getListBullet().get(i).y , game.getListBullet().get(i).width, game.getListBullet().get(i).height);
+			g.fillRect(game.getListBullet().get(i).getX() , game.getListBullet().get(i).getY() , game.getListBullet().get(i).getSize(), game.getListBullet().get(i).getSize());
 		}
 		//Mi figura
 		g.setColor(Color.GREEN);
