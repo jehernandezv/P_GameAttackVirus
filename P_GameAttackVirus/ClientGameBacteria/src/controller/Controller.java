@@ -35,12 +35,15 @@ public class Controller implements MouseListener,ActionListener{
 			try {
 				this.defender = new Defender("localhost", 9000);
 				defender.requestInitGame();
-				System.out.println("witrh: " +defender.getAreaGame()[0]+ " heith: " + defender.getAreaGame()[1]);
-				game = new Game(new Hero(100, 100, 50), defender.getAreaGame());
+				if(defender.isValuesInit()){
+				int [] areaGame = {defender.getValuesInit()[0],defender.getValuesInit()[1]};
+				//System.out.println("with: " + defender.getValuesInit()[0] + " heith: " + defender.getValuesInit()[1]);
+				game = new Game(new Hero(defender.getValuesInit()[2],defender.getValuesInit()[3], 50),areaGame);
 				this.jFrameMainWindow = new JFrameMainWindow(this,game);
 				this.jFrameMainWindow.initGame(this);
 				this.game.start();
 				this.refresh();
+				}
 			} catch (IOException e1) {
 				e1.printStackTrace();
 		}

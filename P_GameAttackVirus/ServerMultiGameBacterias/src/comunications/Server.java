@@ -14,6 +14,7 @@ public class Server extends Thread implements IObserver {
 	private boolean stop;
 	public final static Logger LOGGER = Logger.getGlobal();
 	private ArrayList<ThreadSocket> connections;
+	private PosFigures [] posFigures;
 	private int [] areaGame = {800,600};
 	public Server(int port) throws IOException {
 		connections = new ArrayList<>();
@@ -21,6 +22,7 @@ public class Server extends Thread implements IObserver {
 		server = new ServerSocket(port);
 		start();
 		LOGGER.log(Level.INFO, "Servidor iniciado en puerto: " + this.port);
+		this.posFigures = ManagerPosClients.generateNewPosClient(areaGame, 50);
 	}
 
 	public void run() {
@@ -52,12 +54,15 @@ public class Server extends Thread implements IObserver {
 		for (int i = 0; i < this.connections.size(); i++) {
 			if(connections.get(i).getIdObservable() == idClientRequestArea){
 				try {
-					connections.get(i).sentAreaGame(areaGame);
+					connections.get(i).sentInitValuesGame(areaGame,this.posFigures[i].getX(),this.posFigures[i].getY());
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			
 		}
+	}
+
+	public void sentPosClien(int idClientRequestPos) {
+		
 	}
 }

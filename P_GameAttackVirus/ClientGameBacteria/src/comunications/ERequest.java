@@ -1,5 +1,5 @@
 package comunications;
 
 public enum ERequest {
-	INITGAME
+	INITGAME,POS_CLIENT
 }

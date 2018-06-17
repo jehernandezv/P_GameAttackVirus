@@ -2,12 +2,18 @@ package comunications;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 
+import persistence.FileManager;
+
 public class ThreadSocket extends Thread implements IObservable{
 	private IObserver iObserver;
+	private File fileSent;
 	public int idObservable;
 	private static int cont;
 	private Socket connection;
@@ -20,21 +26,24 @@ public class ThreadSocket extends Thread implements IObservable{
 		input = new DataInputStream(socket.getInputStream());
 		output = new DataOutputStream(socket.getOutputStream());
 		idObservable = ++cont;
+		String [] string = {""};
+		FileManager.writeFile(string, this.idObservable);
 		start();
 	}
 
 	public void run() {
+		try{
 		while (!stop) {
 			String request;
-			try {
 				request = input.readUTF();
 				if (request != null) {
 					manageRequest(request);
 				}
-			} catch (IOException e) {
-				System.err.println(e.getMessage());
-				this.stop = true;
-			}
+		}
+		
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+			this.stop = true;
 		}
 	}
 
@@ -50,10 +59,41 @@ public class ThreadSocket extends Thread implements IObservable{
 		Server.LOGGER.log(Level.INFO, "Conexion con: " + connection.getInetAddress().getHostAddress() + " cerrada.");
 	}
 	
-	public void sentAreaGame(int [] areaGame) throws IOException{
+	public void sentInitValuesGame(int [] areaGame,int x,int y) throws IOException{
 		output.writeUTF(EResponse.INITGAME.name());
-		output.writeInt(areaGame[0]);
-		output.writeInt(areaGame[1]);
+		this.fileSent = FileManager.writeFile(generateValuesInit(areaGame, x, y), this.idObservable);
+		sendUsersFile(fileSent);
+	}
+	
+	public void sendUsersFile(File file) {
+		try {
+			sendFile(file);
+		} catch (IOException e) {
+			Server.LOGGER.log(Level.WARNING, e.getMessage());
+		}
+	}
+
+	private void sendFile(File file) throws IOException {
+		byte[] array = new byte[(int) file.length()];
+		readFileBytes(file, array);
+		output.writeUTF(file.getName());
+		output.writeInt(array.length);
+		output.write(array);
+}
+	
+	private void readFileBytes(File file, byte[] array) throws IOException {
+		FileInputStream fInputStream = new FileInputStream(file);
+		fInputStream.read(array);
+		fInputStream.close();
+}
+	
+	public String [] generateValuesInit(int [] areaGame, int x, int y){
+		String [] values = new String[4];
+		values[0] = String.valueOf(areaGame[0]);
+		values[1] = String.valueOf(areaGame[1]);
+		values[2] = String.valueOf(x);
+		values[3] = String.valueOf(y);
+		return values;
 	}
 
 	public IObserver getiObserver() {
@@ -66,13 +106,11 @@ public class ThreadSocket extends Thread implements IObservable{
 
 	@Override
 	public void addObserver(IObserver observer) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void removeObserver() {
-		// TODO Auto-generated method stub
 		
 	}
 

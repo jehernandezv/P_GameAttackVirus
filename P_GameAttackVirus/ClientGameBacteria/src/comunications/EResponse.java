@@ -1,5 +1,5 @@
 package comunications;
 
 public enum EResponse {
-	INITGAME
+	INITGAME,POS_CLIENT
 }
