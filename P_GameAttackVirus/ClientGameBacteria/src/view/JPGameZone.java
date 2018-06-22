@@ -2,11 +2,14 @@ package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Iterator;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+import model.Bullet;
 import model.Game;
+import model.InfoFigures;
 import controller.Controller;
 
 public class JPGameZone extends JPanel{
@@ -27,16 +30,17 @@ public class JPGameZone extends JPanel{
 		super.paint(g);
 		this.setBackground(Color.decode("#5D92FF"));
 		//Disparos de mi jugador
-		for (int i = 0; i < game.getListBullet().size(); i++) {
-			g.drawImage(bullet.getImage(), game.getListBullet().get(i).getX() + CONSTAN_BALANCE, game.getListBullet().get(i).getY(), null);
+		for (Iterator<?> iterator = game.getListBullet().iterator(); iterator.hasNext();) {
+			Bullet bullet = (Bullet) iterator.next();
+			g.drawImage(this.bullet.getImage(),bullet.getX() + CONSTAN_BALANCE, bullet.getY(), null);
 		}
 		//Mi figura
 		g.drawImage(blobuloWhite.getImage(), valuesInit[2], valuesInit[3], null);
 		//Amigos
 		g.setColor(Color.BLACK);
-		for (int i = 0; i < game.getListFriends().size(); i++) {
-			g.fillRect(game.getListFriends().get(i).getX(), game.getListFriends().get(i).getY(),
-					game.getListFriends().get(i).getSize(),game.getListFriends().get(i).getSize());
+		for (Iterator<?> iterator = game.getListFriends().iterator(); iterator.hasNext();) {
+			InfoFigures figure = (InfoFigures) iterator.next();
+			g.fillRect(figure.getX(), figure.getY(), figure.getSize(), figure.getSize());
 		}
 	}
 		
