@@ -5,11 +5,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import javax.swing.Timer;
 import comunications.Defender;
 import model.Bullet;
 import model.Game;
 import model.Hero;
+import model.InfoFiguresFriends;
 import view.JDInitGame;
 import view.JFrameMainWindow;
 
@@ -41,10 +43,21 @@ public class Controller implements MouseListener,ActionListener,IObserver{
 	@Override
 	public void isSendValuesInit() {
 		int[] areaGame = { defender.getValuesInit()[0],defender.getValuesInit()[1]};
-		game = new Game(new Hero(defender.getValuesInit()[2],defender.getValuesInit()[3], 50), areaGame);
+		game = new Game(new Hero(defender.getValuesInit()[2],defender.getValuesInit()[3], 50), areaGame,
+				addTotalFriends(defender.getValuesFriends()));
 		this.jFrameMainWindow = new JFrameMainWindow(this, game,defender.getValuesInit());
 		this.game.start();
 		this.refresh();
+	}
+	
+	public ArrayList<InfoFiguresFriends> addTotalFriends(int [] listFriends){
+		ArrayList<InfoFiguresFriends> friends = new ArrayList<InfoFiguresFriends>();
+		byte contX = 0;
+		for (int i = 0; i < 4; i++) {
+			friends.add(new InfoFiguresFriends(defender.getValuesFriends()[contX], defender.getValuesFriends()[contX + 1], 50));
+			contX += 2;
+		}
+		return friends;
 	}
 	
 	public void receivedValuesInit(){
@@ -84,7 +97,7 @@ public class Controller implements MouseListener,ActionListener,IObserver{
 	}
 	
 	private void refresh(){
-		this.timerRefresh = new Timer(10, new ActionListener() {
+		this.timerRefresh = new Timer(20, new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
 				jFrameMainWindow.repaint();

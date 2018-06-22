@@ -24,9 +24,6 @@ public class Server extends Thread implements IObserver {
 		start();
 		LOGGER.log(Level.INFO, "Servidor iniciado en puerto: " + this.port);
 		this.posFigures = ManagerPosClients.generateNewPosClient(areaGame[0] - 10,areaGame[1] - 90,50);
-		for (int i = 0; i < posFigures.length; i++) {
-			System.out.println("x " + posFigures[i].getX()+ " y " + posFigures[i].getY());
-		}
 	}
 
 	public void run() {
@@ -54,11 +51,12 @@ public class Server extends Thread implements IObserver {
 		}
 	}
 
-	public void sentValuesInitGameClient(int idClientRequestArea) {
+	public void sentValuesInitGameClient(int idClientRequestInit) {
+		if(this.connections.size() == 5){
 		for (int i = 0; i < this.connections.size(); i++) {
-			if(connections.get(i).getIdObservable() == idClientRequestArea){
 				try {
-					connections.get(i).sentInitValuesGame(genetateStringValuesInit((byte) i));
+					connections.get(i).sentInitValuesGame(genetateStringValuesInit(this.areaGame,posFigures[i].getX(),posFigures[i].getY()),
+							generateValuesInitFriends(idClientRequestInit));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -66,29 +64,20 @@ public class Server extends Thread implements IObserver {
 		}
 	}
 	
-	public String genetateStringValuesInit(byte index){
-		String values = "";
-		switch (index) {
-		case 0:
-			values = areaGame[0]+ "/"+ areaGame[1] + "/" + this.posFigures[2].getX()+ "/"+ this.posFigures[2].getY();
-			break;
-		case 1:
-			values = areaGame[0]+ "/"+ areaGame[1] + "/" + this.posFigures[1].getX()+ "/"+ this.posFigures[1].getY();
-			break;
-		case 2:
-			values = areaGame[0]+ "/"+ areaGame[1] + "/" + this.posFigures[3].getX()+ "/"+ this.posFigures[3].getY();
-			break;
-		case 3:
-			values = areaGame[0]+ "/"+ areaGame[1] + "/" + this.posFigures[0].getX()+ "/"+ this.posFigures[0].getY();
-			break;
-		case 4:
-			values = areaGame[0]+ "/"+ areaGame[1] + "/" + this.posFigures[4].getX()+ "/"+ this.posFigures[4].getY();
-			break;
-		}
+	public String genetateStringValuesInit(int [] areaGame,int x, int y){
+		String values = areaGame[0] + "/" + areaGame[1] + "/" + x + "/" + y;
 		return values;
 	}
-
-	public void sentPosClien(int idClientRequestPos) {
-		
+	
+	public String generateValuesInitFriends(int idClientRequestInit){
+		String friends = "";
+		for (int i = 0; i < posFigures.length; i++) {
+			if(this.posFigures[i].getIdPlayer() != idClientRequestInit){
+				friends += this.posFigures[i].getX() + "/" + this.posFigures[i].getY() + "/";
+				System.out.println(this.posFigures[i].getX() + "/" + this.posFigures[i].getY() + "/");
+			}
+		}
+		return friends;
 	}
+
 }

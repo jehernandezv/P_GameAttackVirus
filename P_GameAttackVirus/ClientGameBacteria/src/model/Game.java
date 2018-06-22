@@ -13,10 +13,10 @@ public class Game extends Thread{
 	private short timeSave;
 	private GroupFriends groupFriends;
 	
-	public Game(Hero hero,int [] areaGame) {
+	public Game(Hero hero,int [] areaGame,ArrayList<InfoFiguresFriends> lisFriends) {
 		this.hero = hero;
 		this.areaGame = areaGame;
-		this.groupFriends = new GroupFriends();
+		this.groupFriends = new GroupFriends(lisFriends);
 	}
 	
 
@@ -42,6 +42,10 @@ public class Game extends Thread{
 		}
 	}
 	
+	public void addFriendList(InfoFiguresFriends figureFriend){
+		this.groupFriends.addFriendList(figureFriend);
+	}
+	
 	public int getXHero(){
 		return this.hero.getxHero();
 	}
@@ -54,7 +58,7 @@ public class Game extends Thread{
 		return this.hero.getSize();
 	}
 	
-	public ArrayList<InfoFigures> getListFriends(){
+	public ArrayList<InfoFiguresFriends> getListFriends(){
 		return groupFriends.getListFriends();
 	}
 

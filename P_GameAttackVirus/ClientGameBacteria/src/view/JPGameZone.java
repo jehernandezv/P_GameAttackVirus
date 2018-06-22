@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 import model.Bullet;
 import model.Game;
-import model.InfoFigures;
+import model.InfoFiguresFriends;
 import controller.Controller;
 
 public class JPGameZone extends JPanel{
@@ -18,7 +18,7 @@ public class JPGameZone extends JPanel{
 	private int [] valuesInit;
 	private ImageIcon blobuloWhite =  new ImageIcon(getClass().getResource("/globuloblanco.png"));
 	private ImageIcon bullet =  new ImageIcon(getClass().getResource("/bullet.png"));
-	private final byte CONSTAN_BALANCE = 25;
+	private final byte CONSTANT_BALANCE = 25;
 	
 	public JPGameZone(Controller controller,Game game,int [] valuesInit) {
 		this.valuesInit = valuesInit;
@@ -32,14 +32,14 @@ public class JPGameZone extends JPanel{
 		//Disparos de mi jugador
 		for (Iterator<?> iterator = game.getListBullet().iterator(); iterator.hasNext();) {
 			Bullet bullet = (Bullet) iterator.next();
-			g.drawImage(this.bullet.getImage(),bullet.getX() + CONSTAN_BALANCE, bullet.getY(), null);
+			g.drawImage(this.bullet.getImage(),bullet.getX() + CONSTANT_BALANCE, bullet.getY(), null);
 		}
 		//Mi figura
 		g.drawImage(blobuloWhite.getImage(), valuesInit[2], valuesInit[3], null);
 		//Amigos
 		g.setColor(Color.BLACK);
 		for (Iterator<?> iterator = game.getListFriends().iterator(); iterator.hasNext();) {
-			InfoFigures figure = (InfoFigures) iterator.next();
+			InfoFiguresFriends figure = (InfoFiguresFriends) iterator.next();
 			g.fillRect(figure.getX(), figure.getY(), figure.getSize(), figure.getSize());
 		}
 	}

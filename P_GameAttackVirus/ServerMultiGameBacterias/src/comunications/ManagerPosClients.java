@@ -7,7 +7,7 @@ public class ManagerPosClients {
 		int subPos = width / posFigures.length;
 		int auxSubpos = subPos;
 		for (int i = 0; i < posFigures.length; i++) {
-			posFigures[i] = new PosFigures(auxSubpos - (sizeFigure + 10) - 50, heigth);
+			posFigures[i] = new PosFigures(auxSubpos - (sizeFigure + 10) - 50, heigth,(byte) (i +1));
 			auxSubpos += subPos;
 		}
 		return posFigures;

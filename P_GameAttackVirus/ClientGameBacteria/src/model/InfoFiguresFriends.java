@@ -1,12 +1,12 @@
 package model;
 
-public class InfoFigures {
+public class InfoFiguresFriends {
 	private int x;
 	private int y;
 	private int size;
 	
 	
-	public InfoFigures(int x, int y, int size) {
+	public InfoFiguresFriends(int x, int y, int size) {
 		this.x = x;
 		this.y = y;
 		this.size = size;

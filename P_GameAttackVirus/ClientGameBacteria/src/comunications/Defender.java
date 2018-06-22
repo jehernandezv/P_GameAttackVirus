@@ -16,6 +16,7 @@ public class Defender extends Thread implements IObservable{
 	private DataOutputStream output;
 	private boolean stop;
 	private int [] valuesInit = new int [4];
+	private int [] valuesFriends;
 	private boolean isValuesInit;
 	public static final String PATH = "./configClient/";
 
@@ -57,12 +58,16 @@ public class Defender extends Thread implements IObservable{
 	 * @throws IOException
 	 */
 	private void receivedValuesInitGame() throws IOException {
-		String[] valuesVector = input.readUTF().split("/");
-
-		for (int i = 0; i < valuesVector.length; i++) {
-			valuesInit[i] = Integer.parseInt(valuesVector[i]);
+		String[] valuesVectorPlayer = input.readUTF().split("/");
+		String[] valuesVectorFriends = input.readUTF().split("/");
+		for (int i = 0; i < valuesVectorPlayer.length; i++) {
+			valuesInit[i] = Integer.parseInt(valuesVectorPlayer[i]);
 		}
-		if (this.valuesInit.length == valuesVector.length) {
+		this.valuesFriends = new int[valuesVectorFriends.length];
+		for (int i = 0; i < valuesVectorFriends.length; i++) {
+			this.valuesFriends[i] = Integer.parseInt(valuesVectorFriends[i]);
+		}
+		if (this.valuesInit.length == valuesVectorPlayer.length && this.valuesFriends.length == valuesVectorFriends.length) {
 			iObserver.isSendValuesInit();
 		}
 	}
@@ -136,4 +141,13 @@ public class Defender extends Thread implements IObservable{
 		// TODO Auto-generated method stub
 		
 	}
+
+	public int[] getValuesFriends() {
+		return valuesFriends;
+	}
+
+	public void setValuesFriends(int[] valuesFriends) {
+		this.valuesFriends = valuesFriends;
+	}
+	
 }

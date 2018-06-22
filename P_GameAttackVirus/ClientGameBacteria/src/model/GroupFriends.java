@@ -3,18 +3,27 @@ package model;
 import java.util.ArrayList;
 
 public class GroupFriends {
-	private ArrayList<InfoFigures> listFriends;
+	private ArrayList<InfoFiguresFriends> listFriends;
 	
-	public GroupFriends() {
-		this.listFriends = new ArrayList<InfoFigures>();
+	public GroupFriends(ArrayList<InfoFiguresFriends> listFriends) {
+		this.listFriends = listFriends;
 	}
 	
-	public ArrayList<InfoFigures> getListFriends(){
+	public ArrayList<InfoFiguresFriends> getListFriends(){
 		return listFriends;
 	}
 	
-	public void addFriends(InfoFigures friend){
+	public void addFriends(InfoFiguresFriends friend){
 		this.listFriends.add(friend);
 	}
+	
+	public void addFriendList(InfoFiguresFriends figureFriend){
+		this.listFriends.add(figureFriend);
+	}
+
+	public void setListFriends(ArrayList<InfoFiguresFriends> listFriends) {
+		this.listFriends = listFriends;
+	}
+	
 
 }

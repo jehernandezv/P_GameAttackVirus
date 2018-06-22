@@ -59,9 +59,10 @@ public class ThreadSocket extends Thread implements IObservable{
 	 * @param y
 	 * @throws IOException
 	 */
-	public void sentInitValuesGame(String values) throws IOException{
+	public void sentInitValuesGame(String valuesPlayer,String valuesFriends) throws IOException{
 		output.writeUTF(EResponse.INITGAME.name());
-		output.writeUTF(values);
+		output.writeUTF(valuesPlayer);
+		output.writeUTF(valuesFriends);
 	}
 	
 	public void sendUsersFile(File file) {
