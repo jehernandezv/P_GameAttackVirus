@@ -16,13 +16,17 @@ public class Server extends Thread implements IObserver {
 	private ArrayList<ThreadSocket> connections;
 	private PosFigures [] posFigures;
 	private int [] areaGame = {800,600};
+	
 	public Server(int port) throws IOException {
 		connections = new ArrayList<>();
 		this.port = port;
 		server = new ServerSocket(port);
 		start();
 		LOGGER.log(Level.INFO, "Servidor iniciado en puerto: " + this.port);
-		this.posFigures = ManagerPosClients.generateNewPosClient(areaGame, 50);
+		this.posFigures = ManagerPosClients.generateNewPosClient(areaGame[0] - 10,areaGame[1] - 90,50);
+		for (int i = 0; i < posFigures.length; i++) {
+			System.out.println("x " + posFigures[i].getX()+ " y " + posFigures[i].getY());
+		}
 	}
 
 	public void run() {
@@ -50,16 +54,38 @@ public class Server extends Thread implements IObserver {
 		}
 	}
 
-	public void sentAreaGamePlayers(int idClientRequestArea) {
+	public void sentValuesInitGameClient(int idClientRequestArea) {
 		for (int i = 0; i < this.connections.size(); i++) {
 			if(connections.get(i).getIdObservable() == idClientRequestArea){
 				try {
-					connections.get(i).sentInitValuesGame(areaGame,this.posFigures[i].getX(),this.posFigures[i].getY());
+					connections.get(i).sentInitValuesGame(genetateStringValuesInit((byte) i));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 		}
+	}
+	
+	public String genetateStringValuesInit(byte index){
+		String values = "";
+		switch (index) {
+		case 0:
+			values = areaGame[0]+ "/"+ areaGame[1] + "/" + this.posFigures[2].getX()+ "/"+ this.posFigures[2].getY();
+			break;
+		case 1:
+			values = areaGame[0]+ "/"+ areaGame[1] + "/" + this.posFigures[1].getX()+ "/"+ this.posFigures[1].getY();
+			break;
+		case 2:
+			values = areaGame[0]+ "/"+ areaGame[1] + "/" + this.posFigures[3].getX()+ "/"+ this.posFigures[3].getY();
+			break;
+		case 3:
+			values = areaGame[0]+ "/"+ areaGame[1] + "/" + this.posFigures[0].getX()+ "/"+ this.posFigures[0].getY();
+			break;
+		case 4:
+			values = areaGame[0]+ "/"+ areaGame[1] + "/" + this.posFigures[4].getX()+ "/"+ this.posFigures[4].getY();
+			break;
+		}
+		return values;
 	}
 
 	public void sentPosClien(int idClientRequestPos) {

@@ -9,9 +9,12 @@ import controller.Controller;
 public class JPGameZone extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private Game game;
+	private int [] valuesInit;
 	
-	public JPGameZone(Controller controller,Game game) {
+	public JPGameZone(Controller controller,Game game,int [] valuesInit) {
+		this.valuesInit = valuesInit;
 		this.game = game;
+		System.out.println("x " + valuesInit[2] + " y " + valuesInit[3]);
 		this.addMouseListener(controller);
 	}
 	
@@ -25,7 +28,7 @@ public class JPGameZone extends JPanel{
 		}
 		//Mi figura
 		g.setColor(Color.GREEN);
-		g.fillRect(game.getHero().getxHero(), game.getHero().getyHero(), game.getHero().getSize(), game.getHero().getSize());
+		g.fillRect(valuesInit[2], valuesInit[3], 50, 50);
 		
 		//Amigos
 		g.setColor(Color.BLACK);

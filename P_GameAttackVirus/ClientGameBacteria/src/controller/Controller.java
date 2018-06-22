@@ -5,9 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-
 import javax.swing.Timer;
-
 import comunications.Defender;
 import model.Bullet;
 import model.Game;
@@ -15,7 +13,7 @@ import model.Hero;
 import view.JDInitGame;
 import view.JFrameMainWindow;
 
-public class Controller implements MouseListener,ActionListener{
+public class Controller implements MouseListener,ActionListener,IObserver{
 	private JFrameMainWindow jFrameMainWindow;
 	private Defender defender;
 	private JDInitGame jdInitGame;
@@ -32,21 +30,7 @@ public class Controller implements MouseListener,ActionListener{
 		switch (EAction.valueOf(e.getActionCommand())) {
 		case INIIGAME:
 			jdInitGame.disableJDInit();
-			try {
-				this.defender = new Defender("localhost", 9000);
-				defender.requestInitGame();
-				if(defender.isValuesInit()){
-				int [] areaGame = {defender.getValuesInit()[0],defender.getValuesInit()[1]};
-				//System.out.println("with: " + defender.getValuesInit()[0] + " heith: " + defender.getValuesInit()[1]);
-				game = new Game(new Hero(defender.getValuesInit()[2],defender.getValuesInit()[3], 50),areaGame);
-				this.jFrameMainWindow = new JFrameMainWindow(this,game);
-				this.jFrameMainWindow.initGame(this);
-				this.game.start();
-				this.refresh();
-				}
-			} catch (IOException e1) {
-				e1.printStackTrace();
-		}
+			receivedValuesInit();
 			break;
 			
 		default:
@@ -54,8 +38,26 @@ public class Controller implements MouseListener,ActionListener{
 		}
 	}
 	
+	@Override
+	public void isSendValuesInit() {
+		int[] areaGame = { defender.getValuesInit()[0],defender.getValuesInit()[1]};
+		game = new Game(new Hero(defender.getValuesInit()[2],defender.getValuesInit()[3], 50), areaGame);
+		this.jFrameMainWindow = new JFrameMainWindow(this, game,defender.getValuesInit());
+		this.game.start();
+		this.refresh();
+	}
+	
+	public void receivedValuesInit(){
+		try {
+			this.defender = new Defender("localhost", 9000,this);
+			defender.requestInitGame();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
 	public void mouseClicked(MouseEvent e) {
-		this.game.addBullet(new Bullet(0, (short) 50, game.getHero().getxHero(), game.getHero().getyHero()));
+		this.game.addBullet(new Bullet(270, (short) 50, defender.getValuesInit()[2], defender.getValuesInit()[3]));
 	}
 
 	@Override
@@ -91,6 +93,7 @@ public class Controller implements MouseListener,ActionListener{
 		});
 		timerRefresh.start();
 	}
+
 
 
 }

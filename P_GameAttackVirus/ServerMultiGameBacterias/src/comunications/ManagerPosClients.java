@@ -2,12 +2,12 @@ package comunications;
 
 public class ManagerPosClients {
 	
-	public static PosFigures [] generateNewPosClient(int [] areaGame, int sizeFigure){
+	public static PosFigures [] generateNewPosClient(int width, int heigth,int sizeFigure){
 		PosFigures [] posFigures = new PosFigures[5];
-		int subPos = areaGame[0] / posFigures.length;
+		int subPos = width / posFigures.length;
 		int auxSubpos = subPos;
 		for (int i = 0; i < posFigures.length; i++) {
-			posFigures[i] = new PosFigures(auxSubpos - (sizeFigure + 10), areaGame[1] - (sizeFigure / 2));
+			posFigures[i] = new PosFigures(auxSubpos - (sizeFigure + 10) - 50, heigth);
 			auxSubpos += subPos;
 		}
 		return posFigures;

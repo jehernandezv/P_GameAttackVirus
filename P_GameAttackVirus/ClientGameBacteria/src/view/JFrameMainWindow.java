@@ -10,17 +10,17 @@ public class JFrameMainWindow extends JFrame{
 	private JPGameZone jpGameZone;
 	private Game game;
 		
-	public JFrameMainWindow(Controller controller,Game game) {
+	public JFrameMainWindow(Controller controller,Game game,int [] valuesInit) {
 		this.game = game;
 		this.setSize(game.getAreaGame()[0], game.getAreaGame()[1]);
 		this.setLayout(new BorderLayout());
+		this.jpGameZone = new JPGameZone(controller,this.game,valuesInit);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		initGame();
 		this.setVisible(true);
 	}
 	
-	public void initGame(Controller controller){
-		this.jpGameZone = new JPGameZone(controller,this.game);
+	public void initGame(){
 		this.add(jpGameZone,BorderLayout.CENTER);
 	}
-	
 }

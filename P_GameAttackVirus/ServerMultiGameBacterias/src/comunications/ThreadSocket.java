@@ -4,16 +4,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
 
-import persistence.FileManager;
-
 public class ThreadSocket extends Thread implements IObservable{
 	private IObserver iObserver;
-	private File fileSent;
 	public int idObservable;
 	private static int cont;
 	private Socket connection;
@@ -26,8 +22,6 @@ public class ThreadSocket extends Thread implements IObservable{
 		input = new DataInputStream(socket.getInputStream());
 		output = new DataOutputStream(socket.getOutputStream());
 		idObservable = ++cont;
-		String [] string = {""};
-		FileManager.writeFile(string, this.idObservable);
 		start();
 	}
 
@@ -51,18 +45,23 @@ public class ThreadSocket extends Thread implements IObservable{
 		Server.LOGGER.log(Level.INFO, "Request: " + connection.getInetAddress().getHostAddress() + " - " + request);
 		switch (ERequest.valueOf(request)) {
 		case INITGAME:
-			this.iObserver.sentAreaGamePlayers(idObservable);
+			this.iObserver.sentValuesInitGameClient(idObservable);
 			break;
 		default:
 			break;
 		}
 		Server.LOGGER.log(Level.INFO, "Conexion con: " + connection.getInetAddress().getHostAddress() + " cerrada.");
 	}
-	
-	public void sentInitValuesGame(int [] areaGame,int x,int y) throws IOException{
+	/**
+	 * Este metodo se encarga de enviar el archivo de valores iniciales requerido al cliente
+	 * @param areaGame
+	 * @param x
+	 * @param y
+	 * @throws IOException
+	 */
+	public void sentInitValuesGame(String values) throws IOException{
 		output.writeUTF(EResponse.INITGAME.name());
-		this.fileSent = FileManager.writeFile(generateValuesInit(areaGame, x, y), this.idObservable);
-		sendUsersFile(fileSent);
+		output.writeUTF(values);
 	}
 	
 	public void sendUsersFile(File file) {
@@ -72,30 +71,30 @@ public class ThreadSocket extends Thread implements IObservable{
 			Server.LOGGER.log(Level.WARNING, e.getMessage());
 		}
 	}
-
+	/**
+	 * Haciendo uso del Dataoutput se envia los datos del archivo ya constituido
+	 * @param file
+	 * @throws IOException
+	 */
 	private void sendFile(File file) throws IOException {
 		byte[] array = new byte[(int) file.length()];
-		readFileBytes(file, array);
+		readBytesBuffer(file, array);
 		output.writeUTF(file.getName());
 		output.writeInt(array.length);
 		output.write(array);
 }
-	
-	private void readFileBytes(File file, byte[] array) throws IOException {
-		FileInputStream fInputStream = new FileInputStream(file);
-		fInputStream.read(array);
-		fInputStream.close();
-}
-	
-	public String [] generateValuesInit(int [] areaGame, int x, int y){
-		String [] values = new String[4];
-		values[0] = String.valueOf(areaGame[0]);
-		values[1] = String.valueOf(areaGame[1]);
-		values[2] = String.valueOf(x);
-		values[3] = String.valueOf(y);
-		return values;
+	/**
+	 * Este metodo lee un archivo con los bytes del array que entra por parametro
+	 * @param file
+	 * @param array
+	 * @throws IOException
+	 */
+	private void readBytesBuffer(File file, byte[] array) throws IOException {
+		FileInputStream fileInputStream = new FileInputStream(file);
+		fileInputStream.read(array);
+		fileInputStream.close();
 	}
-
+	
 	public IObserver getiObserver() {
 		return iObserver;
 	}
@@ -121,14 +120,4 @@ public class ThreadSocket extends Thread implements IObservable{
 	public void setIdObservable(int idObservable) {
 		this.idObservable = idObservable;
 	}
-	
-//	private void responseTimeService() throws IOException {
-//		output.writeUTF(EResponse.TIME.toString());
-//		output.writeUTF(LocalTime.now().format(DateTimeFormatter.ISO_TIME));
-//	}
-//
-//	private void responseWordsService() throws IOException {
-//		output.writeUTF(EResponse.WORDS.toString());
-//		output.writeUTF("Hola mundo");
-//	}
 }

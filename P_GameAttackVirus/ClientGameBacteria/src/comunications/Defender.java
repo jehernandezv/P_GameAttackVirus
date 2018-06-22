@@ -6,20 +6,22 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import persistence.FileManager;
+import controller.IObservable;
+import controller.IObserver;
 
-public class Defender extends Thread {
-	private int x;
-	private int y;
+public class Defender extends Thread implements IObservable{
+	private IObserver iObserver;
 	private Socket connection;
 	private DataInputStream input;
 	private DataOutputStream output;
 	private boolean stop;
 	private int [] valuesInit = new int [4];
 	private boolean isValuesInit;
+	public static final String PATH = "./configClient/";
 
-	public Defender(String ip,int port) throws IOException {
+	public Defender(String ip,int port,IObserver iObserver) throws IOException {
 		this.connection = new Socket(ip, port);
+		this.iObserver = iObserver;
 		input = new DataInputStream(connection.getInputStream());
 		output = new DataOutputStream(connection.getOutputStream());
 		start();
@@ -38,48 +40,53 @@ public class Defender extends Thread {
 				this.stop = true;
 			}
 		}
-		 if (connection != null) {
-             try {
-				connection.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-         }
 	}
 
 	private void manageResponse(String response) throws IOException {
 		switch (EResponse.valueOf(response)) {
 		case INITGAME:
-			this.isValuesInit = receivedValuesInitGame();
+			receivedValuesInitGame();
 			break;
 		default:
 			break;
 		}
 	}
-	private boolean receivedValuesInitGame() throws IOException{
-				File file = new File("./configClient/" + input.readUTF());
-				readFile(file);
-				String values = FileManager.readFile(file);
-				String [] valuesVector = values.split("/");
-				for (int i = 0; i < valuesVector.length; i++) {
-					valuesInit[i] = Integer.parseInt(valuesVector[i]);
-					System.out.println(valuesVector[i]);
-				}
-			boolean	flag = true;
-		
-		return flag;
+	/**
+	 * Recibe el archivo de valores iniciales enviado por el servidor
+	 * @return
+	 * @throws IOException
+	 */
+	private void receivedValuesInitGame() throws IOException {
+		String[] valuesVector = input.readUTF().split("/");
+
+		for (int i = 0; i < valuesVector.length; i++) {
+			valuesInit[i] = Integer.parseInt(valuesVector[i]);
+		}
+		if (this.valuesInit.length == valuesVector.length) {
+			iObserver.isSendValuesInit();
+		}
 	}
 	
-	public void readFile(File file) throws IOException {
+	/**
+	 * Este metodo saca del buffer los bytes recibidos y lo envia a un metodo para que sean escritos en un archivo
+	 * @param file
+	 * @throws IOException
+	 */
+	public void readByteBuffer(File file) throws IOException {
 		byte[] fileArray = new byte[input.readInt()];
 		input.readFully(fileArray);
 		writeFile(file, fileArray);
 	}
-
+	/**
+	 * Este metodo escribe un archivo con los bytes del array que entra por parametro
+	 * @param file
+	 * @param array
+	 * @throws IOException
+	 */
 	private void writeFile(File file, byte[] array) throws IOException {
-		FileOutputStream fOutputStream = new FileOutputStream(file);
-		fOutputStream.write(array);
-		fOutputStream.close();
+		FileOutputStream fileOutputStream = new FileOutputStream(file);
+		fileOutputStream.write(array);
+		fileOutputStream.close();
 }
 	
 	public void requestInitGame() throws IOException{
@@ -92,22 +99,6 @@ public class Defender extends Thread {
 
 	public void setAreaGame(int[] areaGame) {
 		this.valuesInit = areaGame;
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public void setX(int x) {
-		this.x = x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
 	}
 
 	public int[] getValuesInit() {
@@ -124,5 +115,25 @@ public class Defender extends Thread {
 
 	public void setValuesInit(boolean isValuesInit) {
 		this.isValuesInit = isValuesInit;
+	}
+
+	public IObserver getiObserver() {
+		return iObserver;
+	}
+
+	public void setiObserver(IObserver iObserver) {
+		this.iObserver = iObserver;
+	}
+
+	@Override
+	public void addObserver(IObserver observer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeObserver() {
+		// TODO Auto-generated method stub
+		
 	}
 }

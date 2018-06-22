@@ -25,6 +25,10 @@ import java.io.OutputStreamWriter;
 		return file;
 	}
 	
+	public void resetValuesGame(){
+		
+	}
+	
 	public static String readFile(File file) {
 		String cadena;
 		String files = "";

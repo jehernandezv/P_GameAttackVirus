@@ -26,6 +26,7 @@ public class Game extends Thread{
 		while(true){
 		try {
 			Thread.sleep(10);
+			if(hero.getGroupBullet().getListBullets().size() > 0){
 			for (Iterator<?> it = getListBullet().iterator(); it.hasNext();) {
 				Bullet bullet = (Bullet) it.next();
 				if(bullet.getX() > areaGame[0] || bullet.getY() > areaGame[1]){
@@ -34,11 +35,23 @@ public class Game extends Thread{
 					bullet.move(5);
 				}
 			  }
+			}
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
 		}
-		
+	}
+	
+	public int getXHero(){
+		return this.hero.getxHero();
+	}
+	
+	public int getYHero(){
+		return this.hero.getyHero();
+	}
+	
+	public int getHeroSize(){
+		return this.hero.getSize();
 	}
 	
 	public ArrayList<InfoFigures> getListFriends(){
