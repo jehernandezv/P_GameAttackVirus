@@ -2,7 +2,10 @@ package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
+
 import model.Game;
 import controller.Controller;
 
@@ -10,11 +13,13 @@ public class JPGameZone extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private Game game;
 	private int [] valuesInit;
+	private ImageIcon blobuloWhite =  new ImageIcon(getClass().getResource("/globuloblanco.png"));
+	private ImageIcon bullet =  new ImageIcon(getClass().getResource("/bullet.png"));
+	private final byte CONSTAN_BALANCE = 25;
 	
 	public JPGameZone(Controller controller,Game game,int [] valuesInit) {
 		this.valuesInit = valuesInit;
 		this.game = game;
-		System.out.println("x " + valuesInit[2] + " y " + valuesInit[3]);
 		this.addMouseListener(controller);
 	}
 	
@@ -22,14 +27,11 @@ public class JPGameZone extends JPanel{
 		super.paint(g);
 		this.setBackground(Color.decode("#5D92FF"));
 		//Disparos de mi jugador
-		g.setColor(Color.RED);
 		for (int i = 0; i < game.getListBullet().size(); i++) {
-			g.fillRect(game.getListBullet().get(i).getX() , game.getListBullet().get(i).getY() , game.getListBullet().get(i).getSize(), game.getListBullet().get(i).getSize());
+			g.drawImage(bullet.getImage(), game.getListBullet().get(i).getX() + CONSTAN_BALANCE, game.getListBullet().get(i).getY(), null);
 		}
 		//Mi figura
-		g.setColor(Color.GREEN);
-		g.fillRect(valuesInit[2], valuesInit[3], 50, 50);
-		
+		g.drawImage(blobuloWhite.getImage(), valuesInit[2], valuesInit[3], null);
 		//Amigos
 		g.setColor(Color.BLACK);
 		for (int i = 0; i < game.getListFriends().size(); i++) {
