@@ -23,4 +23,5 @@ public class JFrameMainWindow extends JFrame{
 	public void initGame(){
 		this.add(jpGameZone,BorderLayout.CENTER);
 	}
+	
 }

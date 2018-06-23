@@ -6,35 +6,39 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
+
 import javax.swing.Timer;
+
 import comunications.Defender;
 import model.Bullet;
 import model.Game;
 import model.Hero;
 import model.InfoFiguresFriends;
-import view.JDInitGame;
+import view.JDInitClient;
 import view.JFrameMainWindow;
 
 public class Controller implements MouseListener,ActionListener,IObserver{
 	private JFrameMainWindow jFrameMainWindow;
 	private Defender defender;
-	private JDInitGame jdInitGame;
 	private Game game;
 	private Timer timerRefresh;
+	private JDInitClient jdInitClient;
 
 	
 	public Controller() throws IOException {
-		jdInitGame = new JDInitGame(this);
-		jdInitGame.showJDInit();
+		jdInitClient = new JDInitClient(this);
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		switch (EAction.valueOf(e.getActionCommand())) {
 		case INIIGAME:
-			jdInitGame.disableJDInit();
-			receivedValuesInit();
+			jdInitClient.dispose();
+			try {
+				receivedValuesInit();
+			} catch (NumberFormatException | IOException e1) {
+				e1.printStackTrace();
+			}
 			break;
-			
 		default:
 			break;
 		}
@@ -60,13 +64,15 @@ public class Controller implements MouseListener,ActionListener,IObserver{
 		return friends;
 	}
 	
-	public void receivedValuesInit(){
-		try {
-			this.defender = new Defender("localhost", 9000,this);
-			defender.requestInitGame();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+	public void receivedValuesInit() throws NumberFormatException, IOException{
+		ArrayList<String> valuesInit = jdInitClient.getValuesInitClient();
+		byte itemSelec = jdInitClient.getSelecRadioButton();
+		if (valuesInit.get(2).equals(null) || itemSelec == 2) {
+			this.defender = new Defender("localhost",Integer.parseInt(valuesInit.get(1)),this,valuesInit.get(0));
+		} else {
+			this.defender = new Defender("localhost",Integer.parseInt(valuesInit.get(1)),this,valuesInit.get(0));
 		}
+		this.defender.requestInitGame();
 	}
 	
 	public void mouseClicked(MouseEvent e) {

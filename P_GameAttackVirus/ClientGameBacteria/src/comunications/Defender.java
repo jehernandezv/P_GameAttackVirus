@@ -10,6 +10,7 @@ import controller.IObservable;
 import controller.IObserver;
 
 public class Defender extends Thread implements IObservable{
+	private String nameClient;
 	private IObserver iObserver;
 	private Socket connection;
 	private DataInputStream input;
@@ -20,9 +21,10 @@ public class Defender extends Thread implements IObservable{
 	private boolean isValuesInit;
 	public static final String PATH = "./configClient/";
 
-	public Defender(String ip,int port,IObserver iObserver) throws IOException {
+	public Defender(String ip,int port,IObserver iObserver,String nameClient) throws IOException {
 		this.connection = new Socket(ip, port);
 		this.iObserver = iObserver;
+		this.nameClient = nameClient;
 		input = new DataInputStream(connection.getInputStream());
 		output = new DataOutputStream(connection.getOutputStream());
 		start();
@@ -102,32 +104,16 @@ public class Defender extends Thread implements IObservable{
 		return valuesInit;
 	}
 
-	public void setAreaGame(int[] areaGame) {
-		this.valuesInit = areaGame;
-	}
-
 	public int[] getValuesInit() {
 		return valuesInit;
 	}
-
-	public void setValuesInit(int[] valuesInit) {
-		this.valuesInit = valuesInit;
-	}
-
+	
 	public boolean isValuesInit() {
 		return isValuesInit;
 	}
 
-	public void setValuesInit(boolean isValuesInit) {
-		this.isValuesInit = isValuesInit;
-	}
-
 	public IObserver getiObserver() {
 		return iObserver;
-	}
-
-	public void setiObserver(IObserver iObserver) {
-		this.iObserver = iObserver;
 	}
 
 	@Override
@@ -143,9 +129,8 @@ public class Defender extends Thread implements IObservable{
 	public int[] getValuesFriends() {
 		return valuesFriends;
 	}
-
-	public void setValuesFriends(int[] valuesFriends) {
-		this.valuesFriends = valuesFriends;
-	}
 	
+	public String getNameClient() {
+		return nameClient;
+	}
 }
