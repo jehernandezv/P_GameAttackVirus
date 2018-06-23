@@ -24,7 +24,6 @@ public class Controller implements MouseListener,ActionListener,IObserver{
 	private Timer timerRefresh;
 	private JDInitClient jdInitClient;
 
-	
 	public Controller() throws IOException {
 		jdInitClient = new JDInitClient(this);
 	}
@@ -47,7 +46,7 @@ public class Controller implements MouseListener,ActionListener,IObserver{
 	@Override
 	public void isSendValuesInit() {
 		int[] areaGame = { defender.getValuesInit()[0],defender.getValuesInit()[1]};
-		game = new Game(new Hero(defender.getValuesInit()[2],defender.getValuesInit()[3], 50), areaGame,
+		game = new Game(new Hero(defender.getValuesInit()[2],defender.getValuesInit()[3], 50,defender.getNameClient()), areaGame,
 				addTotalFriends(defender.getValuesFriends()));
 		this.jFrameMainWindow = new JFrameMainWindow(this, game,defender.getValuesInit());
 		this.game.start();
@@ -57,8 +56,9 @@ public class Controller implements MouseListener,ActionListener,IObserver{
 	public ArrayList<InfoFiguresFriends> addTotalFriends(int [] listFriends){
 		ArrayList<InfoFiguresFriends> friends = new ArrayList<InfoFiguresFriends>();
 		byte contX = 0;
-		for (int i = 0; i < 4; i++) {
-			friends.add(new InfoFiguresFriends(defender.getValuesFriends()[contX], defender.getValuesFriends()[contX + 1], 50));
+		for (int i = 0; i < defender.getNamesFriends().length; i++) {
+			friends.add(new InfoFiguresFriends(defender.getValuesFriends()[contX], defender.getValuesFriends()[contX + 1], 50,
+					defender.getNamesFriends()[i]));
 			contX += 2;
 		}
 		return friends;

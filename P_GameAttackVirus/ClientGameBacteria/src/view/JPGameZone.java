@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.util.Iterator;
 
@@ -20,6 +21,8 @@ public class JPGameZone extends JPanel{
 	private ImageIcon bullet =  new ImageIcon(getClass().getResource("/bullet.png"));
 	private ImageIcon imgFriend =  new ImageIcon(getClass().getResource("/friend.png"));
 	private final byte CONSTANT_BALANCE = 25;
+	private final byte CONSTANT_ALIGNMENT = 10;
+	private Font fontNamePlayers = new Font("Arial", Font.BOLD, 16);
 	
 	public JPGameZone(Controller controller,Game game,int [] valuesInit) {
 		this.valuesInit = valuesInit;
@@ -37,11 +40,14 @@ public class JPGameZone extends JPanel{
 		}
 		//Mi figura
 		g.drawImage(blobuloWhite.getImage(), valuesInit[2], valuesInit[3], null);
+		g.setFont(fontNamePlayers);
+		g.drawString(game.getNameHero(), valuesInit[2] + CONSTANT_ALIGNMENT, valuesInit[3]);
 		//Amigos
 		g.setColor(Color.BLACK);
 		for (Iterator<?> iterator = game.getListFriends().iterator(); iterator.hasNext();) {
 			InfoFiguresFriends figure = (InfoFiguresFriends) iterator.next();
 			g.drawImage(imgFriend.getImage(), figure.getX(), figure.getY(), null);
+			g.drawString(figure.getNameFriend(), figure.getX() + CONSTANT_ALIGNMENT, figure.getY());
 		}
 	}
 		

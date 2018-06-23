@@ -16,8 +16,9 @@ public class Defender extends Thread implements IObservable{
 	private DataInputStream input;
 	private DataOutputStream output;
 	private boolean stop;
-	private int [] valuesInit = new int [4];
-	private int [] valuesFriends;
+	private int [] valuesInit;
+	private int [] PosFriends;
+	private String [] namesFriends;
 	private boolean isValuesInit;
 	public static final String PATH = "./configClient/";
 
@@ -27,6 +28,7 @@ public class Defender extends Thread implements IObservable{
 		this.nameClient = nameClient;
 		input = new DataInputStream(connection.getInputStream());
 		output = new DataOutputStream(connection.getOutputStream());
+		sentName();
 		start();
 	}
 
@@ -45,6 +47,10 @@ public class Defender extends Thread implements IObservable{
 		}
 	}
 
+	private void sentName() throws IOException{
+		output.writeUTF(ERequest.NAME_CLIENT.name());
+		output.writeUTF(this.nameClient);
+	}
 	private void manageResponse(String response) throws IOException {
 		switch (EResponse.valueOf(response)) {
 		case INITGAME:
@@ -62,14 +68,26 @@ public class Defender extends Thread implements IObservable{
 	private void receivedValuesInitGame() throws IOException {
 		String[] valuesVectorPlayer = input.readUTF().split("/");
 		String[] valuesVectorFriends = input.readUTF().split("/");
+		String[] namesFriends = input.readUTF().split("/");
+		//Parametros del juego, y pos del jugador principal
+		this.valuesInit = new int [valuesVectorPlayer.length];
 		for (int i = 0; i < valuesVectorPlayer.length; i++) {
 			valuesInit[i] = Integer.parseInt(valuesVectorPlayer[i]);
 		}
-		this.valuesFriends = new int[valuesVectorFriends.length];
+		//posiciones de los amigos en el juego
+		this.PosFriends = new int[valuesVectorFriends.length];
 		for (int i = 0; i < valuesVectorFriends.length; i++) {
-			this.valuesFriends[i] = Integer.parseInt(valuesVectorFriends[i]);
+				this.PosFriends[i] = Integer.parseInt(valuesVectorFriends[i]);
 		}
-		if (this.valuesInit.length == valuesVectorPlayer.length && this.valuesFriends.length == valuesVectorFriends.length) {
+		//nombres de los amigos del jugador principal
+		this.namesFriends = new String [namesFriends.length];
+		for (int i = 0; i < namesFriends.length; i++) {
+			this.namesFriends[i] = namesFriends[i];
+		}
+		
+		if (this.valuesInit.length == valuesVectorPlayer.length
+				&& this.PosFriends.length == valuesVectorFriends.length
+				&& this.namesFriends.length == namesFriends.length) {
 			iObserver.isSendValuesInit();
 		}
 	}
@@ -127,10 +145,14 @@ public class Defender extends Thread implements IObservable{
 	}
 
 	public int[] getValuesFriends() {
-		return valuesFriends;
+		return PosFriends;
 	}
 	
 	public String getNameClient() {
 		return nameClient;
+	}
+
+	public String[] getNamesFriends() {
+		return namesFriends;
 	}
 }

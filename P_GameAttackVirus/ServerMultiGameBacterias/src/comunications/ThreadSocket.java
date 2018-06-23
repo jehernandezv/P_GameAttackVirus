@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 
 public class ThreadSocket extends Thread implements IObservable{
+	private String nameClient;
 	private IObserver iObserver;
 	public int idObservable;
 	private static int cont;
@@ -47,6 +48,10 @@ public class ThreadSocket extends Thread implements IObservable{
 		case INITGAME:
 			this.iObserver.sentValuesInitGameClient(idObservable);
 			break;
+		case NAME_CLIENT:
+			receivedNameClient();
+			System.out.println("name: " + this.nameClient);
+			break;
 		default:
 			break;
 		}
@@ -59,10 +64,15 @@ public class ThreadSocket extends Thread implements IObservable{
 	 * @param y
 	 * @throws IOException
 	 */
-	public void sentInitValuesGame(String valuesPlayer,String valuesFriends) throws IOException{
+	public void sentInitValuesGame(String valuesPlayer,String PosFriends,String namesFriends) throws IOException{
 		output.writeUTF(EResponse.INITGAME.name());
 		output.writeUTF(valuesPlayer);
-		output.writeUTF(valuesFriends);
+		output.writeUTF(PosFriends);
+		output.writeUTF(namesFriends);
+	}
+	
+	private void receivedNameClient() throws IOException{
+		this.nameClient = input.readUTF();
 	}
 	
 	public void sendUsersFile(File file) {
@@ -118,7 +128,8 @@ public class ThreadSocket extends Thread implements IObservable{
 		return idObservable;
 	}
 
-	public void setIdObservable(int idObservable) {
-		this.idObservable = idObservable;
+	public String getNameClient() {
+		return nameClient;
 	}
+	
 }

@@ -52,11 +52,12 @@ public class Server extends Thread implements IObserver {
 	}
 
 	public void sentValuesInitGameClient(int idClientRequestInit) {
-		if(this.connections.size() == 5){
+		if(this.connections.size() == 3){
 		for (int i = 0; i < this.connections.size(); i++) {
 				try {
-					connections.get(i).sentInitValuesGame(generateStringValuesInit(this.areaGame,posFigures[i].getX(),posFigures[i].getY()),
-							generateValuesInitFriends(connections.get(i).getIdObservable()));
+					connections.get(i).sentInitValuesGame(generateStringValuesInit(this.areaGame,posFigures[i].getX()
+							,posFigures[i].getY()),generateValuesInitFriends(connections.get(i).getIdObservable())
+							,generateNamesFriends(connections.get(i).getIdObservable()));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -65,8 +66,7 @@ public class Server extends Thread implements IObserver {
 	}
 	
 	public String generateStringValuesInit(int [] areaGame,int x, int y){
-		String values = areaGame[0] + "/" + areaGame[1] + "/" + x + "/" + y;
-		return values;
+		return areaGame[0] + "/" + areaGame[1] + "/" + x + "/" + y;
 	}
 	
 	public String generateValuesInitFriends(int idClientRequestInit){
@@ -77,6 +77,16 @@ public class Server extends Thread implements IObserver {
 			}
 		}
 		return friends;
+	}
+	
+	public String generateNamesFriends(int idClientRequestInit){
+		String names = "";
+		for (int i = 0; i < this.connections.size(); i++) {
+			if(connections.get(i).getIdObservable() != idClientRequestInit){
+				names += connections.get(i).getNameClient() + "/";
+			}
+		}
+			return names;
 	}
 
 }

@@ -42,6 +42,10 @@ public class Game extends Thread{
 		}
 	}
 	
+	public String getNameHero(){
+		return hero.getNameHero();
+	}
+	
 	public void addFriendList(InfoFiguresFriends figureFriend){
 		this.groupFriends.addFriendList(figureFriend);
 	}

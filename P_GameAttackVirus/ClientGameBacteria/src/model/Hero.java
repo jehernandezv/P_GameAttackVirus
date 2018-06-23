@@ -5,12 +5,14 @@ import java.util.ArrayList;
 
 public class Hero{
 	private GroupBullet groupBullet;
+	private String nameHero;
 	private short health = 100;
 	private int xHero;
 	private int yHero;
 	private int size;
 
-	public Hero(int x, int y ,int size) {
+	public Hero(int x, int y ,int size,String nameHero) {
+		this.nameHero = nameHero;
 		this.xHero = x;
 		this.yHero = x;
 		this.size = size;
@@ -25,18 +27,10 @@ public class Hero{
 		return groupBullet;
 	}
 
-	public void setGroupBullet(GroupBullet groupBullet) {
-		this.groupBullet = groupBullet;
-	}
-
 	public short getHealth() {
 		return health;
 	}
 
-	public void setHealth(short health) {
-		this.health = health;
-	}
-	
 	public ArrayList<Bullet> getListBullet(){
 		return groupBullet.getListBullets();
 	}
@@ -49,26 +43,15 @@ public class Hero{
 		return xHero;
 	}
 
-	public void setxHero(int xHero) {
-		this.xHero = xHero;
-	}
-
 	public int getyHero() {
 		return yHero;
-	}
-
-	public void setyHero(int yHero) {
-		this.yHero = yHero;
 	}
 
 	public int getSize() {
 		return size;
 	}
 
-	public void setSize(int size) {
-		this.size = size;
+	public String getNameHero() {
+		return nameHero;
 	}
-	
-	
-
 }
