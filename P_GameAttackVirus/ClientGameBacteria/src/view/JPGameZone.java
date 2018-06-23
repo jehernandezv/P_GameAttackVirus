@@ -18,6 +18,7 @@ public class JPGameZone extends JPanel{
 	private int [] valuesInit;
 	private ImageIcon blobuloWhite =  new ImageIcon(getClass().getResource("/globuloblanco.png"));
 	private ImageIcon bullet =  new ImageIcon(getClass().getResource("/bullet.png"));
+	private ImageIcon imgFriend =  new ImageIcon(getClass().getResource("/friend.png"));
 	private final byte CONSTANT_BALANCE = 25;
 	
 	public JPGameZone(Controller controller,Game game,int [] valuesInit) {
@@ -40,7 +41,7 @@ public class JPGameZone extends JPanel{
 		g.setColor(Color.BLACK);
 		for (Iterator<?> iterator = game.getListFriends().iterator(); iterator.hasNext();) {
 			InfoFiguresFriends figure = (InfoFiguresFriends) iterator.next();
-			g.fillRect(figure.getX(), figure.getY(), figure.getSize(), figure.getSize());
+			g.drawImage(imgFriend.getImage(), figure.getX(), figure.getY(), null);
 		}
 	}
 		

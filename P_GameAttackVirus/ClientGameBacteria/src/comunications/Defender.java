@@ -132,13 +132,11 @@ public class Defender extends Thread implements IObservable{
 
 	@Override
 	public void addObserver(IObserver observer) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void removeObserver() {
-		// TODO Auto-generated method stub
 		
 	}
 

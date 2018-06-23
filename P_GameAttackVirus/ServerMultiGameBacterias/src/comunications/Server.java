@@ -55,8 +55,8 @@ public class Server extends Thread implements IObserver {
 		if(this.connections.size() == 5){
 		for (int i = 0; i < this.connections.size(); i++) {
 				try {
-					connections.get(i).sentInitValuesGame(genetateStringValuesInit(this.areaGame,posFigures[i].getX(),posFigures[i].getY()),
-							generateValuesInitFriends(idClientRequestInit));
+					connections.get(i).sentInitValuesGame(generateStringValuesInit(this.areaGame,posFigures[i].getX(),posFigures[i].getY()),
+							generateValuesInitFriends(connections.get(i).getIdObservable()));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -64,17 +64,16 @@ public class Server extends Thread implements IObserver {
 		}
 	}
 	
-	public String genetateStringValuesInit(int [] areaGame,int x, int y){
+	public String generateStringValuesInit(int [] areaGame,int x, int y){
 		String values = areaGame[0] + "/" + areaGame[1] + "/" + x + "/" + y;
 		return values;
 	}
 	
 	public String generateValuesInitFriends(int idClientRequestInit){
 		String friends = "";
-		for (int i = 0; i < posFigures.length; i++) {
+		for (int i = 0; i < this.connections.size(); i++) {
 			if(this.posFigures[i].getIdPlayer() != idClientRequestInit){
 				friends += this.posFigures[i].getX() + "/" + this.posFigures[i].getY() + "/";
-				System.out.println(this.posFigures[i].getX() + "/" + this.posFigures[i].getY() + "/");
 			}
 		}
 		return friends;

@@ -97,7 +97,7 @@ public class Controller implements MouseListener,ActionListener,IObserver{
 	}
 	
 	private void refresh(){
-		this.timerRefresh = new Timer(20, new ActionListener() {
+		this.timerRefresh = new Timer(10, new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
 				jFrameMainWindow.repaint();
@@ -106,7 +106,4 @@ public class Controller implements MouseListener,ActionListener,IObserver{
 		});
 		timerRefresh.start();
 	}
-
-
-
 }
