@@ -18,12 +18,8 @@ public class Bullet{
 	
 	public void move(int step) throws InterruptedException {
 		double x = this.x, y = this.y;
-		this.x = ((int) (x + step * Math.cos(this.getRadians())));
-		this.y = ((int) (y + step * Math.sin(this.getRadians())));
-	}
-	
-	public double getRadians() {
-		return Math.toRadians(this.getDirection());
+		this.x = ((int) (x + step * Math.cos(this.direction)));
+		this.y = ((int) (y + step * Math.sin(this.direction)));
 	}
 
 	public double getDirection() {

@@ -42,6 +42,18 @@ public class Game extends Thread{
 		}
 	}
 	
+	public double getXGun(){
+		return hero.getXGun();
+	}
+	
+	public double getYGun(){
+		return hero.getYGun();
+	}
+	
+	public void changePositionGun(int x,int y){
+		hero.changePositionGun(x, y);
+	}
+	
 	public String getNameHero(){
 		return hero.getNameHero();
 	}

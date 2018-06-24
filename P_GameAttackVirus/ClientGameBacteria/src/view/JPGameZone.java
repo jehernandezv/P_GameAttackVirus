@@ -28,13 +28,14 @@ public class JPGameZone extends JPanel{
 		this.valuesInit = valuesInit;
 		this.game = game;
 		this.addMouseListener(controller);
+		this.addMouseMotionListener(controller);
 	}
 	
 	public void paint(Graphics g) {
 		super.paint(g);
 		this.setBackground(Color.decode("#5D92FF"));
 		//Disparos de mi jugador
-		for (Iterator<?> iterator = game.getListBullet().iterator(); iterator.hasNext();) {
+		for (Iterator<?> iterator = game.getListBullet().iterator(); iterator.hasNext();){
 			Bullet bullet = (Bullet) iterator.next();
 			g.drawImage(this.bullet.getImage(),bullet.getX() + CONSTANT_BALANCE, bullet.getY(), null);
 		}
@@ -42,6 +43,7 @@ public class JPGameZone extends JPanel{
 		g.drawImage(blobuloWhite.getImage(), valuesInit[2], valuesInit[3], null);
 		g.setFont(fontNamePlayers);
 		g.drawString(game.getNameHero(), valuesInit[2] + CONSTANT_ALIGNMENT, valuesInit[3]);
+		g.drawLine(valuesInit[2],valuesInit[3],(int) game.getXGun(),(int) game.getYGun());
 		//Amigos
 		g.setColor(Color.BLACK);
 		for (Iterator<?> iterator = game.getListFriends().iterator(); iterator.hasNext();) {

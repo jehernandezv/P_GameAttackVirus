@@ -7,6 +7,7 @@ public class Hero{
 	private GroupBullet groupBullet;
 	private String nameHero;
 	private short health = 100;
+	private Gun gun;
 	private int xHero;
 	private int yHero;
 	private int size;
@@ -17,6 +18,20 @@ public class Hero{
 		this.yHero = x;
 		this.size = size;
 		groupBullet = new GroupBullet();
+		this.gun = new Gun();
+	}
+	
+	public void changePositionGun(int x,int y){
+		this.gun.setX(x);
+		this.gun.setY(y);
+	}
+	
+	public double getXGun(){
+		return gun.getX();
+	}
+	
+	public double getYGun(){
+		return gun.getY();
 	}
 	
 	public void decreaseHealth(){

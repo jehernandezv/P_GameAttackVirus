@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -17,7 +18,7 @@ import model.InfoFiguresFriends;
 import view.JDInitClient;
 import view.JFrameMainWindow;
 
-public class Controller implements MouseListener,ActionListener,IObserver{
+public class Controller implements MouseListener,ActionListener,IObserver,MouseMotionListener{
 	private JFrameMainWindow jFrameMainWindow;
 	private Defender defender;
 	private Game game;
@@ -70,23 +71,30 @@ public class Controller implements MouseListener,ActionListener,IObserver{
 		if (valuesInit.get(2).equals(null) || itemSelec == 2) {
 			this.defender = new Defender("localhost",Integer.parseInt(valuesInit.get(1)),this,valuesInit.get(0));
 		} else {
-			this.defender = new Defender("localhost",Integer.parseInt(valuesInit.get(1)),this,valuesInit.get(0));
+			this.defender = new Defender(valuesInit.get(2),Integer.parseInt(valuesInit.get(1)),this,valuesInit.get(0));
 		}
 		this.defender.requestInitGame();
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		this.game.addBullet(new Bullet(270, (short) 50, defender.getValuesInit()[2], defender.getValuesInit()[3]));
+		this.game.addBullet(new Bullet(Math.atan2(e.getY() - defender.getValuesInit()[3], e.getX() - defender.getValuesInit()[2]), 40, defender.getValuesInit()[2], defender.getValuesInit()[3]));
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		
 	}
+	@Override
+	public void mouseDragged(MouseEvent e) {
+	}
+	
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		game.changePositionGun(e.getX(), e.getY());
+	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -112,4 +120,5 @@ public class Controller implements MouseListener,ActionListener,IObserver{
 		});
 		timerRefresh.start();
 	}
+
 }
