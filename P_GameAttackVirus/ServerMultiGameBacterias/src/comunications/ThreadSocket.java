@@ -145,5 +145,14 @@ public class ThreadSocket extends Thread implements IObservable{
 	public String getNameClient() {
 		return nameClient;
 	}
+
+	public boolean isStop() {
+		return stop;
+	}
+
+	public void setStop(boolean stop) {
+		this.stop = stop;
+	}
+	
 	
 }

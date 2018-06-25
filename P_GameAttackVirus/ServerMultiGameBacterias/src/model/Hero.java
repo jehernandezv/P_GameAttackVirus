@@ -59,6 +59,4 @@ public class Hero{
 	public void setIdHero(byte idHero) {
 		this.idHero = idHero;
 	}
-	
-	
 }

@@ -23,6 +23,8 @@ public class Server extends Thread implements IObserver {
 	private int [] areaGame = {800,600};
 	private GameServer gameServer;
 	private static final byte LIMITPLAYERS = 3;
+	private static final String SEPARATOR_ONE = "/";
+	private static final String SEPARATOR_TWO = ";";
 	
 	public Server(int port) throws IOException {
 		connections = new ArrayList<>();
@@ -80,14 +82,14 @@ public class Server extends Thread implements IObserver {
 		
 	}
 	public String generateStringValuesInit(int [] areaGame,int x, int y){
-		return areaGame[0] + "/" + areaGame[1] + "/" + x + "/" + y;
+		return areaGame[0] + SEPARATOR_ONE + areaGame[1] + SEPARATOR_ONE + x + SEPARATOR_ONE + y;
 	}
 	
 	public String generateValuesInitFriends(int idClientRequestInit){
 		String friends = "";
 		for (int i = 0; i < this.connections.size(); i++) {
 			if(this.posFigures[i].getIdPlayer() != idClientRequestInit){
-				friends += this.posFigures[i].getX() + "/" + this.posFigures[i].getY() + "/";
+				friends += this.posFigures[i].getX() + SEPARATOR_ONE + this.posFigures[i].getY() + SEPARATOR_ONE;
 			}
 		}
 		return friends;
@@ -97,7 +99,7 @@ public class Server extends Thread implements IObserver {
 		String names = "";
 		for (int i = 0; i < this.connections.size(); i++) {
 			if(connections.get(i).getIdObservable() != idClientRequestInit){
-				names += connections.get(i).getNameClient() + "/";
+				names += connections.get(i).getNameClient() + SEPARATOR_ONE;
 			}
 		}
 			return names;
@@ -108,9 +110,9 @@ public class Server extends Thread implements IObserver {
 		//Agrego el nuevo disparo
 		for (int i = 0; i < gameServer.getListHero().size(); i++) {
 			if(gameServer.getListHero().get(i).getIdHero() == idClientshot){
-				Bullet bullet = new Bullet(Math.atan2(y - gameServer.getListHero().get(i).getyHero()
-						,x - gameServer.getListHero().get(i).getxHero()), gameServer.getListHero().get(i).getxHero(),
-						gameServer.getListHero().get(i).getyHero());
+				Bullet bullet = new Bullet(Math.atan2(y - posFigures[i].getY()
+						,x - posFigures[i].getX()), posFigures[i].getX(),
+						posFigures[i].getY());
 				gameServer.getListHero().get(i).getListBullet().add(bullet);
 			}
 		}
@@ -121,14 +123,13 @@ public class Server extends Thread implements IObserver {
 		//Envio a los jugadores las posiciones de los disparos
 		for (int i = 0; i < connections.size(); i++) {
 			try {
-				String sad = refactorBullets();
-				connections.get(i).sendPosBullet(sad);
+				if(connections.get(i).isStop() != true){
+				connections.get(i).sendPosBullet(refactorBullets());
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}	
-		
-		
 	}
 	
 	public String refactorBullets(){
@@ -137,7 +138,7 @@ public class Server extends Thread implements IObserver {
 			Hero hero = (Hero) iterator.next();
 			for (Iterator<?> iterator2 = hero.getListBullet().iterator(); iterator2.hasNext();) {
 				Bullet bullet = (Bullet) iterator2.next();
-				values += bullet.getX()+";"+bullet.getY()+";"+bullet.getDirection()+"/";
+				values += bullet.getX() + SEPARATOR_TWO + bullet.getY() + SEPARATOR_TWO + bullet.getDirection() + SEPARATOR_ONE;
 			}
 		}
 		return values;

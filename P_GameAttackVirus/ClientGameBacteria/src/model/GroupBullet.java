@@ -16,5 +16,4 @@ public class GroupBullet {
 	public void setListBullets(ArrayList<Bullet> listBullets) {
 		this.listBullets = listBullets;
 	}
-	
 }

@@ -1,19 +1,14 @@
 package model;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import comunications.IObservable;
 import comunications.IObserver;
 
 public class GameServer extends Thread implements IObservable{
 	private ArrayList<Hero> listHero;
 	private IObserver iObserver;
-	private String cronometer;
-	private LocalDateTime cronometerGame;
 	private int [] areaGame;
-	private Boss boss;
 	
 	public GameServer(int [] areaGame,IObserver iObserver) {
 		this.iObserver = iObserver;
@@ -31,7 +26,7 @@ public class GameServer extends Thread implements IObservable{
 				if(hero.getListBullet().size() > 0){
 					for (Iterator<?> iteratorBullet = hero.getListBullet().iterator(); iteratorBullet.hasNext();) {
 						Bullet bullet = (Bullet) iteratorBullet.next();
-							bullet.move(5);
+						 	bullet.move(5);
 						iObserver.updateBulletsUsers();
 					}
 				}
@@ -56,13 +51,11 @@ public class GameServer extends Thread implements IObservable{
 
 	@Override
 	public void addObserver(IObserver observer) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void removeObserver() {
-		// TODO Auto-generated method stub
 		
 	}
 }

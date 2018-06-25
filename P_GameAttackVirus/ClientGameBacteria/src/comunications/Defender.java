@@ -69,7 +69,6 @@ public class Defender extends Thread implements IObservable{
 		}
 	}
 	
-	
 	private void receivedPosBullets() throws IOException{
 		iObserver.updateBullets(input.readUTF());
 	}
