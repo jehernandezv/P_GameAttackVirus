@@ -38,6 +38,7 @@ public class ThreadSocket extends Thread implements IObservable{
 		
 		} catch (IOException e) {
 			System.err.println(e.getMessage());
+			Server.LOGGER.log(Level.INFO, "El cliente: " + this.nameClient + " se desconecto");
 			this.stop = true;
 		}
 	}
@@ -50,7 +51,7 @@ public class ThreadSocket extends Thread implements IObservable{
 			break;
 		case NAME_CLIENT:
 			receivedNameClient();
-			System.out.println("name: " + this.nameClient);
+			Server.LOGGER.log(Level.INFO, "Conexion con : " + nameClient);
 			break;
 		case BULLET:
 			receivedBulletAtProcess();

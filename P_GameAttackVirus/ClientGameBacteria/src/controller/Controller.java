@@ -50,7 +50,6 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 		game = new Game(new Hero(defender.getValuesInit()[2],defender.getValuesInit()[3], 50,defender.getNameClient()), areaGame,
 				addTotalFriends(defender.getValuesFriends()));
 		this.jFrameMainWindow = new JFrameMainWindow(this, game,defender.getValuesInit());
-		//this.game.start();
 		this.refresh();
 	}
 	
@@ -79,6 +78,11 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 	public void mouseClicked(MouseEvent e) {
 		try {
 			this.defender.sendBulletServer(e.getX(), e.getY());
+			try {
+				e.wait(200);
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
+			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -99,9 +103,11 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 		ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 		for (int i = 0; i < listBullets.length; i++) {
 			String [] bullet = listBullets[i].split(";");
+			if(bullet.length > 0){
 			for (int j = 0; j < bullet.length; j++) {
 				bullets.add(new Bullet(Double.parseDouble(bullet[2]), (int)20, Integer.parseInt(bullet[0]), Integer.parseInt(bullet[1])));
 			}
+		  }
 		}
 		
 		return bullets;
@@ -116,7 +122,6 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 	
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		game.changePositionGun(e.getX(), e.getY());
 	}
 
 	@Override
@@ -136,11 +141,12 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 		this.timerRefresh = new Timer(10, new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				jFrameMainWindow.repaint();
-				jFrameMainWindow.revalidate();
+				jFrameMainWindow.getJpGameZone().repaint();;
+				jFrameMainWindow.getJpGameZone().revalidate();;
 			}
 		});
 		timerRefresh.start();
 	}
 
 }
+

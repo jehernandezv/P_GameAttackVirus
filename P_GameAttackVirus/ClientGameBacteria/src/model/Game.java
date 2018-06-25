@@ -1,45 +1,18 @@
 package model;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
 
-public class Game extends Thread{
+public class Game{
 	private Hero hero;
-	private String cronometer;
-	private LocalDateTime cronometerGame;
 	private int [] areaGame;
-	private Boss boss;
-	private short timeSave;
 	private GroupFriends groupFriends;
+	private ArrayList<Enemy> listEnemys;
 	
 	public Game(Hero hero,int [] areaGame,ArrayList<InfoFiguresFriends> lisFriends) {
 		this.hero = hero;
 		this.areaGame = areaGame;
 		this.groupFriends = new GroupFriends(lisFriends);
-	}
-	
-
-	@Override
-	public void run() {
-		//Mover disparos
-		while(true){
-		try {
-			Thread.sleep(10);
-			if(hero.getGroupBullet().getListBullets().size() > 0){
-			for (Iterator<?> it = getListBullet().iterator(); it.hasNext();) {
-				Bullet bullet = (Bullet) it.next();
-				if(bullet.getX() > areaGame[0] || bullet.getY() > areaGame[1]){
-					it.remove();
-				}else{
-					bullet.move(5);
-				}
-			  }
-			}
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-		}
+		this.listEnemys = new ArrayList<Enemy>();
 	}
 	
 	public double getXGun(){
@@ -94,19 +67,6 @@ public class Game extends Thread{
 		this.hero = hero;
 	}
 
-	public String getCronometer() {
-		return cronometer;
-	
-	}
-
-	public LocalDateTime getCronometerGame() {
-		return cronometerGame;
-	}
-
-	public void setCronometerGame(LocalDateTime cronometerGame) {
-		this.cronometerGame = cronometerGame;
-	}
-
 	public int[] getAreaGame() {
 		return areaGame;
 	}
@@ -115,20 +75,14 @@ public class Game extends Thread{
 		this.areaGame = areaGame;
 	}
 
-	public Boss getBoss() {
-		return boss;
+
+	public ArrayList<Enemy> getListEnemys() {
+		return listEnemys;
 	}
 
-	public void setBoss(Boss boss) {
-		this.boss = boss;
-	}
 
-	public short getTimeSave() {
-		return timeSave;
-	}
-
-	public void setTimeSave(short timeSave) {
-		this.timeSave = timeSave;
+	public void setListEnemys(ArrayList<Enemy> listEnemys) {
+		this.listEnemys = listEnemys;
 	}
 
 }

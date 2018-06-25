@@ -8,9 +8,8 @@ public class Enemy {
 	private double direccion;
 	private byte step;
 	
-	public Enemy(int x,int y,int size,double direccion,byte step) {
+	public Enemy(int x,int y,int size,byte step) {
 		this.step = step;
-		this.direccion = direccion;
 		this.posX = x;
 		this.posY = y;
 		this.size = size;

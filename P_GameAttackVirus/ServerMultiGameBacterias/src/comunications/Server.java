@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import model.Bullet;
 import model.GameServer;
 import model.Hero;
@@ -22,11 +21,12 @@ public class Server extends Thread implements IObserver {
 	private PosFigures [] posFigures;
 	private int [] areaGame = {800,600};
 	private GameServer gameServer;
-	private static final byte LIMITPLAYERS = 2;
+	public static  byte LIMITPLAYERS;
 	private static final String SEPARATOR_ONE = "/";
 	private static final String SEPARATOR_TWO = ";";
 	
-	public Server(int port) throws IOException {
+	public Server(int port,byte cantPlayer) throws IOException {
+		LIMITPLAYERS = cantPlayer;
 		connections = new ArrayList<>();
 		this.port = port;
 		server = new ServerSocket(port);
@@ -56,7 +56,7 @@ public class Server extends Thread implements IObserver {
 
 	public static void main(String[] args) {
 		try {
-			new Server(9000);
+			new Server(9000,(byte) 2);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

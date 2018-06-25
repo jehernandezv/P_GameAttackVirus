@@ -64,9 +64,15 @@ public class Defender extends Thread implements IObservable{
 		case SENT_POS_BULLET:
 			receivedPosBullets();
 			break;
+		case SENT_POS_ENEMYS:
+			receivedPosEnemys();
+			break;
 		default:
 			break;
 		}
+	}
+	
+	private void receivedPosEnemys() throws IOException{
 	}
 	
 	private void receivedPosBullets() throws IOException{
