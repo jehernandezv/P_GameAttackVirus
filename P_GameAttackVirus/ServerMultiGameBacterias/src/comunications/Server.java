@@ -22,7 +22,7 @@ public class Server extends Thread implements IObserver {
 	private PosFigures [] posFigures;
 	private int [] areaGame = {800,600};
 	private GameServer gameServer;
-	private static final byte LIMITPLAYERS = 3;
+	private static final byte LIMITPLAYERS = 2;
 	private static final String SEPARATOR_ONE = "/";
 	private static final String SEPARATOR_TWO = ";";
 	
@@ -32,7 +32,7 @@ public class Server extends Thread implements IObserver {
 		server = new ServerSocket(port);
 		start();
 		LOGGER.log(Level.INFO, "Servidor iniciado en puerto: " + this.port);
-		this.posFigures = ManagerPosClients.generateNewPosClient(areaGame[0] - 10,areaGame[1] - 90,50);
+		this.posFigures = ManagerPosClients.generateNewPosClient(areaGame[0] - 10,areaGame[1] - 90,50,LIMITPLAYERS);
 		this.gameServer = new GameServer(areaGame,this);
 		this.gameServer.start();
 	}
@@ -135,9 +135,11 @@ public class Server extends Thread implements IObserver {
 		String values = "";
 		for (Iterator<?> iterator = gameServer.getListHero().iterator(); iterator.hasNext();) {
 			Hero hero = (Hero) iterator.next();
+			if(hero.getListBullet().size() > 0){
 			for (Iterator<?> iterator2 = hero.getListBullet().iterator(); iterator2.hasNext();) {
 				Bullet bullet = (Bullet) iterator2.next();
 				values += bullet.getX() + SEPARATOR_TWO + bullet.getY() + SEPARATOR_TWO + bullet.getDirection() + SEPARATOR_ONE;
+			   }
 			}
 		}
 		return values;

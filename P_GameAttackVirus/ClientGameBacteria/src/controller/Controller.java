@@ -86,25 +86,13 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 
 	@Override
 	public void updateBullets(String values) {
-		System.out.println(values);
 		String [] bullets = values.split("/");
 		addModelBullets(bullets);
 	}
 	
 	public void addModelBullets(String [] bullets){
 		ArrayList<Bullet> listBullets = generatorBullets(bullets);
-		int diferenceBullet = listBullets.size() - game.getHero().getListBullet().size();
-		if(diferenceBullet > 0){
-			for (int i = listBullets.size() - diferenceBullet; i < listBullets.size(); i++) {
-				game.getHero().getListBullet().add(listBullets.get(i));
-			}
-		}else{
-			for (int i = 0; i < listBullets.size(); i++) {
-				game.getHero().getListBullet().get(i).setX(listBullets.get(i).getX());
-				game.getHero().getListBullet().get(i).setY(listBullets.get(i).getY());
-				game.getHero().getListBullet().get(i).setDirection(listBullets.get(i).getDirection());
-			}
-		}
+		game.getHero().getGroupBullet().setListBullets(listBullets);
 	}
 	
 	public ArrayList<Bullet> generatorBullets(String [] listBullets){
