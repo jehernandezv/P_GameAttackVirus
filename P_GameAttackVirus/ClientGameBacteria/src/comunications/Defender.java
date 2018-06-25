@@ -46,6 +46,11 @@ public class Defender extends Thread implements IObservable{
 			}
 		}
 	}
+	
+	public void sendBulletServer(int x,int y) throws IOException{
+		output.writeUTF(ERequest.BULLET.name());
+		output.writeUTF(x+"/"+y);
+	}
 
 	private void sentName() throws IOException{
 		output.writeUTF(ERequest.NAME_CLIENT.name());
@@ -56,9 +61,17 @@ public class Defender extends Thread implements IObservable{
 		case INITGAME:
 			receivedValuesInitGame();
 			break;
+		case SENT_POS_BULLET:
+			receivedPosBullets();
+			break;
 		default:
 			break;
 		}
+	}
+	
+	
+	private void receivedPosBullets() throws IOException{
+		iObserver.updateBullets(input.readUTF());
 	}
 	/**
 	 * Recibe el archivo de valores iniciales enviado por el servidor

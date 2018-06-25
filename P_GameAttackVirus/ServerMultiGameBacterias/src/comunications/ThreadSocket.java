@@ -52,11 +52,24 @@ public class ThreadSocket extends Thread implements IObservable{
 			receivedNameClient();
 			System.out.println("name: " + this.nameClient);
 			break;
+		case BULLET:
+			receivedBulletAtProcess();
+			break;
 		default:
 			break;
 		}
 		Server.LOGGER.log(Level.INFO, "Conexion con: " + connection.getInetAddress().getHostAddress() + " cerrada.");
 	}
+	
+	public void sendPosBullet(String bullets) throws IOException{
+		output.writeUTF(EResponse.SENT_POS_BULLET.name());
+		output.writeUTF(bullets);
+	}
+	
+	private void receivedBulletAtProcess() throws IOException{
+		String [] bullet = input.readUTF().split("/");
+		iObserver.createBullet(Integer.parseInt(bullet[0]), Integer.parseInt(bullet[1]), this.idObservable);
+ 	}
 	/**
 	 * Este metodo se encarga de enviar el archivo de valores iniciales requerido al cliente
 	 * @param areaGame
@@ -73,6 +86,7 @@ public class ThreadSocket extends Thread implements IObservable{
 	
 	private void receivedNameClient() throws IOException{
 		this.nameClient = input.readUTF();
+		iObserver.createHeroGameServer(this.nameClient, (byte) this.idObservable);
 	}
 	
 	public void sendUsersFile(File file) {

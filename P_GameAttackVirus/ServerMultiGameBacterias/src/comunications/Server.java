@@ -4,8 +4,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import model.Bullet;
+import model.GameServer;
+import model.Hero;
 
 public class Server extends Thread implements IObserver {
 
@@ -16,6 +21,8 @@ public class Server extends Thread implements IObserver {
 	private ArrayList<ThreadSocket> connections;
 	private PosFigures [] posFigures;
 	private int [] areaGame = {800,600};
+	private GameServer gameServer;
+	private static final byte LIMITPLAYERS = 3;
 	
 	public Server(int port) throws IOException {
 		connections = new ArrayList<>();
@@ -24,6 +31,8 @@ public class Server extends Thread implements IObserver {
 		start();
 		LOGGER.log(Level.INFO, "Servidor iniciado en puerto: " + this.port);
 		this.posFigures = ManagerPosClients.generateNewPosClient(areaGame[0] - 10,areaGame[1] - 90,50);
+		this.gameServer = new GameServer(areaGame,this);
+		this.gameServer.start();
 	}
 
 	public void run() {
@@ -52,7 +61,7 @@ public class Server extends Thread implements IObserver {
 	}
 
 	public void sentValuesInitGameClient(int idClientRequestInit) {
-		if(this.connections.size() == 3){
+		if(this.connections.size() == LIMITPLAYERS){
 		for (int i = 0; i < this.connections.size(); i++) {
 				try {
 					connections.get(i).sentInitValuesGame(generateStringValuesInit(this.areaGame,posFigures[i].getX()
@@ -65,6 +74,11 @@ public class Server extends Thread implements IObserver {
 		}
 	}
 	
+	@Override
+	public void createHeroGameServer(String nameHero, byte idClientHero) {
+		gameServer.addHero(new Hero(posFigures[idClientHero - 1].getX(), posFigures[idClientHero - 1].getY(), nameHero, idClientHero));
+		
+	}
 	public String generateStringValuesInit(int [] areaGame,int x, int y){
 		return areaGame[0] + "/" + areaGame[1] + "/" + x + "/" + y;
 	}
@@ -88,5 +102,47 @@ public class Server extends Thread implements IObserver {
 		}
 			return names;
 	}
+
+	@Override
+	public void createBullet(int x, int y, int idClientshot) {
+		//Agrego el nuevo disparo
+		for (int i = 0; i < gameServer.getListHero().size(); i++) {
+			if(gameServer.getListHero().get(i).getIdHero() == idClientshot){
+				Bullet bullet = new Bullet(Math.atan2(y - gameServer.getListHero().get(i).getyHero()
+						,x - gameServer.getListHero().get(i).getxHero()), gameServer.getListHero().get(i).getxHero(),
+						gameServer.getListHero().get(i).getyHero());
+				gameServer.getListHero().get(i).getListBullet().add(bullet);
+			}
+		}
+	}
+
+	@Override
+	public void updateBulletsUsers() {
+		//Envio a los jugadores las posiciones de los disparos
+		for (int i = 0; i < connections.size(); i++) {
+			try {
+				String sad = refactorBullets();
+				connections.get(i).sendPosBullet(sad);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}	
+		
+		
+	}
+	
+	public String refactorBullets(){
+		String values = "";
+		for (Iterator<?> iterator = gameServer.getListHero().iterator(); iterator.hasNext();) {
+			Hero hero = (Hero) iterator.next();
+			for (Iterator<?> iterator2 = hero.getListBullet().iterator(); iterator2.hasNext();) {
+				Bullet bullet = (Bullet) iterator2.next();
+				values += bullet.getX()+";"+bullet.getY()+";"+bullet.getDirection()+"/";
+			}
+		}
+		return values;
+		
+	}
+
 
 }

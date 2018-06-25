@@ -6,26 +6,21 @@ public class Bullet{
 	private double direction;
 	private int x;
 	private int y;
-	private int size;
+	private int size = 20;
 	private short damage = 20;
 	
-	public Bullet(double direction, int size,int x,int y) {
-		this.size = size;
+	public Bullet(double direction,int x,int y) {
 		this.x = x;
 		this.y = y;
 		this.direction = direction;
 	}
 	
-	public void move(int step) throws InterruptedException {
+	public void move(int step) {
 		double x = this.x, y = this.y;
-		this.x = ((int) (x + step * Math.cos(this.getRadians())));
-		this.y = ((int) (y + step * Math.sin(this.getRadians())));
+		this.x = ((int) (x + step * Math.cos(direction)));
+		this.y = ((int) (y + step * Math.sin(direction)));
 	}
 	
-	public double getRadians() {
-		return Math.toRadians(this.getDirection());
-	}
-
 	public double getDirection() {
 		return direction;
 	}

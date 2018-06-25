@@ -50,7 +50,7 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 		game = new Game(new Hero(defender.getValuesInit()[2],defender.getValuesInit()[3], 50,defender.getNameClient()), areaGame,
 				addTotalFriends(defender.getValuesFriends()));
 		this.jFrameMainWindow = new JFrameMainWindow(this, game,defender.getValuesInit());
-		this.game.start();
+		//this.game.start();
 		this.refresh();
 	}
 	
@@ -77,7 +77,11 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 	}
 	
 	public void mouseClicked(MouseEvent e) {
-		this.game.addBullet(new Bullet(Math.atan2(e.getY() - defender.getValuesInit()[3], e.getX() - defender.getValuesInit()[2]), 40, defender.getValuesInit()[2], defender.getValuesInit()[3]));
+		try {
+			this.defender.sendBulletServer(e.getX(), e.getY());
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	@Override
@@ -100,14 +104,10 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	private void refresh(){
@@ -121,4 +121,28 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 		timerRefresh.start();
 	}
 
+	@Override
+	public void updateBullets(String values) {
+		System.out.println(values);
+		String [] bullets = values.split("/");
+		addModelBullets(bullets);
+	}
+	
+	public void addModelBullets(String [] bullets){
+		game.getHero().getListBullet().clear();
+		ArrayList<Bullet> listBullets = generatorBullets(bullets);
+		game.getHero().getGroupBullet().setListBullets(listBullets);
+	}
+	
+	public ArrayList<Bullet> generatorBullets(String [] listBullets){
+		ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+		for (int i = 0; i < listBullets.length; i++) {
+			String [] bullet = listBullets[i].split(";");
+			for (int j = 0; j < bullet.length; j++) {
+				bullets.add(new Bullet(Double.parseDouble(bullet[2]), (int)20, Integer.parseInt(bullet[0]), Integer.parseInt(bullet[1])));
+			}
+		}
+		
+		return bullets;
+	}
 }
