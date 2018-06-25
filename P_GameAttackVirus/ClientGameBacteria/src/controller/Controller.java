@@ -85,6 +85,40 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 	}
 
 	@Override
+	public void updateBullets(String values) {
+		System.out.println(values);
+		String [] bullets = values.split("/");
+		addModelBullets(bullets);
+	}
+	
+	public void addModelBullets(String [] bullets){
+		ArrayList<Bullet> listBullets = generatorBullets(bullets);
+		int diferenceBullet = listBullets.size() - game.getHero().getListBullet().size();
+		if(diferenceBullet > 0){
+			for (int i = listBullets.size() - diferenceBullet; i < listBullets.size(); i++) {
+				game.getHero().getListBullet().add(listBullets.get(i));
+			}
+		}else{
+			for (int i = 0; i < listBullets.size(); i++) {
+				game.getHero().getListBullet().get(i).setX(listBullets.get(i).getX());
+				game.getHero().getListBullet().get(i).setY(listBullets.get(i).getY());
+				game.getHero().getListBullet().get(i).setDirection(listBullets.get(i).getDirection());
+			}
+		}
+	}
+	
+	public ArrayList<Bullet> generatorBullets(String [] listBullets){
+		ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+		for (int i = 0; i < listBullets.length; i++) {
+			String [] bullet = listBullets[i].split(";");
+			for (int j = 0; j < bullet.length; j++) {
+				bullets.add(new Bullet(Double.parseDouble(bullet[2]), (int)20, Integer.parseInt(bullet[0]), Integer.parseInt(bullet[1])));
+			}
+		}
+		
+		return bullets;
+	}
+	@Override
 	public void mousePressed(MouseEvent e) {
 		
 	}
@@ -121,28 +155,4 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 		timerRefresh.start();
 	}
 
-	@Override
-	public void updateBullets(String values) {
-		System.out.println(values);
-		String [] bullets = values.split("/");
-		addModelBullets(bullets);
-	}
-	
-	public void addModelBullets(String [] bullets){
-		game.getHero().getListBullet().clear();
-		ArrayList<Bullet> listBullets = generatorBullets(bullets);
-		game.getHero().getGroupBullet().setListBullets(listBullets);
-	}
-	
-	public ArrayList<Bullet> generatorBullets(String [] listBullets){
-		ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-		for (int i = 0; i < listBullets.length; i++) {
-			String [] bullet = listBullets[i].split(";");
-			for (int j = 0; j < bullet.length; j++) {
-				bullets.add(new Bullet(Double.parseDouble(bullet[2]), (int)20, Integer.parseInt(bullet[0]), Integer.parseInt(bullet[1])));
-			}
-		}
-		
-		return bullets;
-	}
 }

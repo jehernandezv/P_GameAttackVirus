@@ -110,8 +110,7 @@ public class Server extends Thread implements IObserver {
 		//Agrego el nuevo disparo
 		for (int i = 0; i < gameServer.getListHero().size(); i++) {
 			if(gameServer.getListHero().get(i).getIdHero() == idClientshot){
-				Bullet bullet = new Bullet(Math.atan2(y - posFigures[i].getY()
-						,x - posFigures[i].getX()), posFigures[i].getX(),
+				Bullet bullet = new Bullet(Math.atan2(y - posFigures[i].getY(),x - posFigures[i].getX()), posFigures[i].getX(),
 						posFigures[i].getY());
 				gameServer.getListHero().get(i).getListBullet().add(bullet);
 			}

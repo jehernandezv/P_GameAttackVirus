@@ -9,6 +9,7 @@ public class GameServer extends Thread implements IObservable{
 	private ArrayList<Hero> listHero;
 	private IObserver iObserver;
 	private int [] areaGame;
+	private static final byte STEP_FIGURE = 5;
 	
 	public GameServer(int [] areaGame,IObserver iObserver) {
 		this.iObserver = iObserver;
@@ -26,8 +27,14 @@ public class GameServer extends Thread implements IObservable{
 				if(hero.getListBullet().size() > 0){
 					for (Iterator<?> iteratorBullet = hero.getListBullet().iterator(); iteratorBullet.hasNext();) {
 						Bullet bullet = (Bullet) iteratorBullet.next();
-						 	bullet.move(5);
-						iObserver.updateBulletsUsers();
+						if(bullet.getX() > areaGame[0] || bullet.getY() < -100){
+							iteratorBullet.remove();
+						}else{
+							bullet.move(STEP_FIGURE);
+						}
+					}
+					if(hero.getListBullet().size() > 0){
+					iObserver.updateBulletsUsers();
 					}
 				}
 			}
