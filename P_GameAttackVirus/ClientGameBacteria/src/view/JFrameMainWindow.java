@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import model.Game;
@@ -14,6 +15,7 @@ public class JFrameMainWindow extends JFrame{
 	private Game game;
 	private ImageIcon icon = new ImageIcon(getClass().getResource("/user.png"));
 	public static final String NAME_APP = "GAME VIRUS ATTACK";
+	private JButton jButtonExitGame;
 		
 	public JFrameMainWindow(Controller controller,Game game,int [] valuesInit) {
 		this.setIconImage(icon.getImage());
@@ -23,12 +25,14 @@ public class JFrameMainWindow extends JFrame{
 		this.setLayout(new BorderLayout());
 		this.setResizable(false);
 		this.jpGameZone = new JPGameZone(controller,this.game,valuesInit);
+		this.jButtonExitGame = new JButton("Exit Game");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		initGame();
 		this.setVisible(true);
 	}
 	
-	public void initGame(){
+	private void initGame(){
+		this.add(this.getContentPane().add(jButtonExitGame), BorderLayout.NORTH);
 		this.add(jpGameZone,BorderLayout.CENTER);
 	}
 

@@ -32,6 +32,7 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 	public void actionPerformed(ActionEvent e) {
 		switch (EAction.valueOf(e.getActionCommand())) {
 		case INIIGAME:
+			jdInitClient.showJDWait();
 			jdInitClient.dispose();
 			try {
 				receivedValuesInit();
@@ -43,9 +44,20 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 			break;
 		}
 	}
+	public void receivedValuesInit() throws NumberFormatException, IOException{
+		ArrayList<String> valuesInit = jdInitClient.getValuesInitClient();
+		byte itemSelec = jdInitClient.getSelecRadioButton();
+		if (valuesInit.get(2).equals(null) || itemSelec == 2) {
+			this.defender = new Defender("localhost",Integer.parseInt(valuesInit.get(1)),this,valuesInit.get(0));
+		} else {
+			this.defender = new Defender(valuesInit.get(2),Integer.parseInt(valuesInit.get(1)),this,valuesInit.get(0));
+		}
+		this.defender.requestInitGame();
+	}
 	
 	@Override
 	public void isSendValuesInit() {
+		jdInitClient.disableJDWait();
 		int[] areaGame = { defender.getValuesInit()[0],defender.getValuesInit()[1]};
 		game = new Game(new Hero(defender.getValuesInit()[2],defender.getValuesInit()[3], 50,defender.getNameClient()), areaGame,
 				addTotalFriends(defender.getValuesFriends()));
@@ -64,16 +76,6 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 		return friends;
 	}
 	
-	public void receivedValuesInit() throws NumberFormatException, IOException{
-		ArrayList<String> valuesInit = jdInitClient.getValuesInitClient();
-		byte itemSelec = jdInitClient.getSelecRadioButton();
-		if (valuesInit.get(2).equals(null) || itemSelec == 2) {
-			this.defender = new Defender("localhost",Integer.parseInt(valuesInit.get(1)),this,valuesInit.get(0));
-		} else {
-			this.defender = new Defender(valuesInit.get(2),Integer.parseInt(valuesInit.get(1)),this,valuesInit.get(0));
-		}
-		this.defender.requestInitGame();
-	}
 	
 	public void mouseClicked(MouseEvent e) {
 		try {
@@ -109,7 +111,6 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 			}
 		  }
 		}
-		
 		return bullets;
 	}
 	@Override
@@ -126,7 +127,6 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		
 	}
 
 	@Override
@@ -139,10 +139,9 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 	
 	private void refresh(){
 		this.timerRefresh = new Timer(10, new ActionListener() {
-			
 			public void actionPerformed(ActionEvent e) {
-				jFrameMainWindow.getJpGameZone().repaint();;
-				jFrameMainWindow.getJpGameZone().revalidate();;
+				jFrameMainWindow.getJpGameZone().repaint();
+				jFrameMainWindow.getJpGameZone().revalidate();
 			}
 		});
 		timerRefresh.start();

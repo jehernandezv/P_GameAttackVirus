@@ -18,6 +18,7 @@ public class JDInitClient extends JDialog{
 	private static final long serialVersionUID = 1L;
 	private JButton jButtonAcceptInitClient;
 	private JPInitValues jpInitValues;
+	private JDWaitInit jdWaitInit;
 	private ImageIcon icon = new ImageIcon(getClass().getResource("/check.png"));
 	private ImageIcon icon1 = new ImageIcon(getClass().getResource("/check1.png"));
 	private ImageIcon iconJDialog = new ImageIcon(getClass().getResource("/user.png"));
@@ -33,6 +34,7 @@ public class JDInitClient extends JDialog{
 		this.setModal(false);
 		setLocationRelativeTo(null);
 		setLayout(new BorderLayout());
+		this.jdWaitInit = new JDWaitInit();
 		jLabelTitleInit = new JLabel();
 		this.jButtonAcceptInitClient = new JButton(NAME_BUTTON);
 		jButtonAcceptInitClient.addActionListener(controller);
@@ -52,6 +54,13 @@ public class JDInitClient extends JDialog{
 		this.add(jLabelTitleInit, BorderLayout.NORTH);
 		this.add(jpInitValues, BorderLayout.CENTER);
 		this.add(jButtonAcceptInitClient,BorderLayout.SOUTH);
+	}
+	public void showJDWait(){
+		this.jdWaitInit.setVisible(true);
+	}
+	
+	public void disableJDWait(){
+		this.jdWaitInit.dispose();
 	}
 	
 	public ArrayList<String> getValuesInitClient(){
