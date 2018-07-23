@@ -67,9 +67,16 @@ public class Defender extends Thread implements IObservable{
 		case SENT_POS_ENEMYS:
 			receivedPosEnemys();
 			break;
+		case UPDATECONNECTIONS:
+			receivedUpdateConnections();
+			break;
 		default:
 			break;
 		}
+	}
+	
+	private void receivedUpdateConnections() throws IOException{
+		iObserver.updateConnections(input.readByte(), input.readByte());
 	}
 	
 	private void receivedPosEnemys() throws IOException{

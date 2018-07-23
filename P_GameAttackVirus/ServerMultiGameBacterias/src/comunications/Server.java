@@ -46,6 +46,7 @@ public class Server extends Thread implements IObserver {
 				ThreadSocket socket = new ThreadSocket(connection);
 				socket.setiObserver(this);
 				connections.add(socket);
+				updateConnections();
 				LOGGER.log(Level.INFO, "Conexion aceptada: " + connection.getInetAddress().getHostAddress());
 			} catch (IOException e) {
 				System.err.println(e.getMessage());
@@ -53,15 +54,16 @@ public class Server extends Thread implements IObserver {
 			}
 		}
 	}
-
-	public static void main(String[] args) {
-		try {
-			new Server(9000,(byte) 2);
-		} catch (IOException e) {
-			e.printStackTrace();
+	
+	public void updateConnections() throws IOException{
+		for (Iterator<?> iterator = connections.iterator(); iterator.hasNext();) {
+			ThreadSocket threadSocket = (ThreadSocket) iterator.next();
+			threadSocket.sentUpdateAtPlayerWait((byte) connections.size(), LIMITPLAYERS);
 		}
 	}
 
+	
+	
 	public void sentValuesInitGameClient(int idClientRequestInit) {
 		if(this.connections.size() == LIMITPLAYERS){
 		for (int i = 0; i < this.connections.size(); i++) {
@@ -145,6 +147,16 @@ public class Server extends Thread implements IObserver {
 		return values;
 		
 	}
+
+	public ArrayList<ThreadSocket> getConnections() {
+		return connections;
+	}
+
+	public void setConnections(ArrayList<ThreadSocket> connections) {
+		this.connections = connections;
+	}
+	
+	
 
 
 }

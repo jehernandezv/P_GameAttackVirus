@@ -44,6 +44,12 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 			break;
 		}
 	}
+	
+	public void updateConnections(byte connections, byte limitConnections) {
+		jdInitClient.setCantPlayersAtWait(limitConnections);
+		jdInitClient.updatePlayersConnection(connections);
+	}
+	
 	public void receivedValuesInit() throws NumberFormatException, IOException{
 		ArrayList<String> valuesInit = jdInitClient.getValuesInitClient();
 		byte itemSelec = jdInitClient.getSelecRadioButton();
@@ -142,10 +148,15 @@ public class Controller implements MouseListener,ActionListener,IObserver,MouseM
 			public void actionPerformed(ActionEvent e) {
 				jFrameMainWindow.getJpGameZone().repaint();
 				jFrameMainWindow.getJpGameZone().revalidate();
+				if(!jdInitClient.isVisible()){
+				jdInitClient.revalidate();
+				}
 			}
 		});
 		timerRefresh.start();
 	}
+
+
 
 }
 

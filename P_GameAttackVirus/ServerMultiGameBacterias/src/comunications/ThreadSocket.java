@@ -42,6 +42,12 @@ public class ThreadSocket extends Thread implements IObservable{
 			this.stop = true;
 		}
 	}
+	
+	public void sentUpdateAtPlayerWait(byte connected,byte limitConnections) throws IOException{
+		output.writeUTF(EResponse.UPDATECONNECTIONS.name());
+		output.writeByte(connected);
+		output.writeByte(limitConnections);
+	}
 
 	private void manageRequest(String request) throws IOException {
 		Server.LOGGER.log(Level.INFO, "Request: " + connection.getInetAddress().getHostAddress() + " - " + request);
@@ -154,6 +160,12 @@ public class ThreadSocket extends Thread implements IObservable{
 	public void setStop(boolean stop) {
 		this.stop = stop;
 	}
-	
-	
+
+	public Socket getConnection() {
+		return connection;
+	}
+
+	public void setConnection(Socket connection) {
+		this.connection = connection;
+	}
 }

@@ -59,6 +59,14 @@ public class JDInitClient extends JDialog{
 		this.jdWaitInit.setVisible(true);
 	}
 	
+	public void setCantPlayersAtWait(byte cantPlayersAtWait) {
+		this.jdWaitInit.setCantPlayersAtWait(cantPlayersAtWait);
+	}
+	
+	public void updatePlayersConnection(byte cant){
+		this.jdWaitInit.updatePlayersConnection(cant);
+	}
+	
 	public void disableJDWait(){
 		this.jdWaitInit.dispose();
 	}
